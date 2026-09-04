@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:18
+    container_name: news-web-postgres
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: news-web
+      POSTGRES_PASSWORD: news_web_password
+      POSTGRES_DB: news_web
+
+    ports:
+      - "5433:5432"
+
+    volumes:
+      - news_web_postgres_data:/var/lib/postgresql
+
+volumes:
+  news_web_postgres_data:
