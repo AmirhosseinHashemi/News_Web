@@ -1,13 +1,12 @@
 import jwt from "jsonwebtoken";
+import { env } from "../config/env.js";
 
 type Payload = {
   userId: number;
 };
 
-const accessSecret = process.env.JWT_ACCESS_SECRET!;
-
 export function generateAccessToken({ userId }: Payload) {
-  return jwt.sign({ userId }, accessSecret, {
-    expiresIn: "15m",
+  return jwt.sign({ userId }, env.JWT_ACCESS_SECRET, {
+    expiresIn: env.JWT_ACCESS_EXPIRES_IN,
   });
 }
