@@ -3,6 +3,7 @@ import { AppError } from "../../errors/AppError.js";
 import InvalidCredentialError from "../../errors/InvalidCredentialError.js";
 import UserRepository from "../user/user.repository.js";
 import { loginPayload } from "./auth.types.js";
+import { generateAccessToken } from "../../lib/jwt.js";
 
 export default class AuthService {
   constructor(private readonly userRepository: UserRepository) {}
@@ -19,12 +20,17 @@ export default class AuthService {
 
     if (!isPasswordValid) throw new InvalidCredentialError();
 
+    const accessToken = generateAccessToken({ userId: user.id });
+
     return {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      phone: user.phone,
-      role: user.role,
+      accessToken,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+      },
     };
   }
 }
