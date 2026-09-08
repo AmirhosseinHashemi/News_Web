@@ -10,7 +10,11 @@ const userRepository = new UserRepository(prisma);
 const refreshTokenRepository = new RefreshTokenRepository(prisma);
 const refreshTokenService = new RefreshTokenService(refreshTokenRepository);
 
-const authService = new AuthService(userRepository, refreshTokenService);
+const authService = new AuthService(
+  userRepository,
+  refreshTokenService,
+  refreshTokenRepository
+);
 const authController = new AuthController(authService);
 
 export { authController };

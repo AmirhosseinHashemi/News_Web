@@ -2,6 +2,8 @@ import bcrypt from "bcrypt";
 import { AppError } from "../../errors/AppError.js";
 import InvalidCredentialError from "../../errors/InvalidCredentialError.js";
 import { generateAccessToken } from "../../lib/jwt.js";
+import { hashRefreshToken } from "../../utils/refreshToken.js";
+import RefreshTokenRepository from "../refresh-token/refresh-token.repository.js";
 import RefreshTokenService from "../refresh-token/refresh-token.service.js";
 import UserRepository from "../user/user.repository.js";
 import { loginPayload } from "./auth.types.js";
@@ -9,7 +11,8 @@ import { loginPayload } from "./auth.types.js";
 export default class AuthService {
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly refreshTokenService: RefreshTokenService
+    private readonly refreshTokenService: RefreshTokenService,
+    private readonly refreshTokenRepository: RefreshTokenRepository
   ) {}
 
   async login({ password, phone }: loginPayload) {
@@ -36,6 +39,33 @@ export default class AuthService {
         phone: user.phone,
         role: user.role,
       },
+    };
+  }
+
+  async refresh(token: string | undefined) {
+    if (!token) throw new InvalidCredentialError("Invalid token");
+
+    const hashedToken = hashRefreshToken(token);
+    const storedToken =
+      await this.refreshTokenRepository.findByHash(hashedToken);
+
+    if (!storedToken) throw new InvalidCredentialError("Invalid token");
+
+    if (storedToken.revokedAt)
+      throw new InvalidCredentialError("Invalid token");
+
+    if (storedToken.expiresAt < new Date())
+      throw new InvalidCredentialError("Invalid token");
+
+    const userId = storedToken.userId;
+
+    const { token: newRefreshToken } =
+      await this.refreshTokenService.rotateRefreshToken(storedToken.id, userId);
+    const accessToken = generateAccessToken({ userId });
+
+    return {
+      accessToken,
+      refreshToken: newRefreshToken,
     };
   }
 }

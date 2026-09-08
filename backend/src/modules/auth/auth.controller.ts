@@ -19,4 +19,17 @@ export default class AuthController {
       data: { accessToken, user },
     });
   };
+
+  refresh = async (req: Request, res: Response) => {
+    const refreshToken = req.cookies.refreshToken as string | undefined;
+
+    const { accessToken, refreshToken: newRefreshToken } =
+      await this.authService.refresh(refreshToken);
+
+    setRefreshTokenCookie(res, newRefreshToken);
+    sendSuccess(res, {
+      message: "New token generated successfully",
+      data: accessToken,
+    });
+  };
 }
