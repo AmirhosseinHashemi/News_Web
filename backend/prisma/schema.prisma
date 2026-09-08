@@ -41,20 +41,21 @@ enum MediaType {
 }
 
 model User {
-  id           Int      @id @default(autoincrement())
+  id            Int      @id @default(autoincrement())
 
-  name         String
-  email        String   @unique
-  phone        String   @unique
-  passwordHash String
+  name          String
+  email         String   @unique
+  phone         String   @unique
+  passwordHash  String
 
-  role         UserRole @default(EDITOR)
-  isActive     Boolean  @default(true)
+  role          UserRole @default(EDITOR)
+  isActive      Boolean  @default(true)
 
-  posts        Post[]
+  posts         Post[]
+  refreshTokens RefreshToken[]
 
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   @@map("users")
 }
@@ -132,4 +133,23 @@ model Media {
   @@index([postId, sortOrder])
 
   @@map("media")
+}
+
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+
+  tokenHash String   @unique
+
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  expiresAt DateTime
+  revokedAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+
+  @@map("refresh_tokens")
 }
