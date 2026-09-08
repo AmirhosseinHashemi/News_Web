@@ -17,6 +17,8 @@ const envSchema = z.object({
   JWT_ACCESS_EXPIRES_IN: z
     .string()
     .transform((value) => value as SignOptions["expiresIn"]),
+
+  REFRESH_TOKEN_EXPIRES_IN_DAYS: z.coerce.number().default(7),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);
