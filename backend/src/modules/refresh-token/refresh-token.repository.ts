@@ -26,12 +26,26 @@ export default class RefreshTokenRepository {
     );
   }
 
-  async revoke(id: number) {
-    return execute(() =>
-      this.prisma.refreshToken.update({
-        where: { id },
-        data: { revokedAt: new Date() },
-      })
+  async rotateRefreshToken(
+    oldTokenDbId: number,
+    newTokenData: CreateRefreshTokenData
+  ) {
+    const [_, refreshToken] = await execute(() =>
+      this.prisma.$transaction([
+        this.prisma.refreshToken.update({
+          where: { id: oldTokenDbId },
+          data: { revokedAt: new Date() },
+        }),
+        this.prisma.refreshToken.create({
+          data: {
+            tokenHash: newTokenData.tokenHash,
+            userId: newTokenData.userId,
+            expiresAt: newTokenData.expiresAt,
+          },
+        }),
+      ])
     );
+
+    return refreshToken;
   }
 }

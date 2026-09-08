@@ -22,4 +22,21 @@ export default class RefreshTokenService {
       expiresAt,
     };
   }
+
+  async rotateRefreshToken(oldTokenDbId: number, userId: number) {
+    const token = generateRefreshToken();
+    const tokenHash = hashRefreshToken(token);
+    const expiresAt = getRefreshTokenExpiration();
+
+    await this.refreshTokenRepository.rotateRefreshToken(oldTokenDbId, {
+      expiresAt,
+      tokenHash,
+      userId,
+    });
+
+    return {
+      token,
+      expiresAt,
+    };
+  }
 }
