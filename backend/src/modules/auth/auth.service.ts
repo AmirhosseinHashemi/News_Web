@@ -1,28 +1,33 @@
 import bcrypt from "bcrypt";
 import { AppError } from "../../errors/AppError.js";
 import InvalidCredentialError from "../../errors/InvalidCredentialError.js";
+import { generateAccessToken } from "../../lib/jwt.js";
+import RefreshTokenService from "../refresh-token/refresh-token.service.js";
 import UserRepository from "../user/user.repository.js";
 import { loginPayload } from "./auth.types.js";
-import { generateAccessToken } from "../../lib/jwt.js";
 
 export default class AuthService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly refreshTokenService: RefreshTokenService
+  ) {}
 
   async login({ password, phone }: loginPayload) {
     const user = await this.userRepository.findByEmail(phone);
-
     if (!user) throw new InvalidCredentialError();
-
     if (!user.isActive)
       throw new AppError({ message: "User is not active", statusCode: 403 });
 
     const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
-
     if (!isPasswordValid) throw new InvalidCredentialError();
 
     const accessToken = generateAccessToken({ userId: user.id });
+    const { token: refreshToken } = await this.refreshTokenService.create(
+      user.id
+    );
 
     return {
+      refreshToken,
       accessToken,
       user: {
         id: user.id,
