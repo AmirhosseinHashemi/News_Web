@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import type { ZodType } from "zod";
 
-import { ValidationError } from "../errors/ValidationError.js";
+import ValidationError from "../errors/ValidationError.js";
 import { mapZodError } from "../utils/zodErrorMapper.js";
 
 type ValidationSchemas = {
@@ -10,7 +10,7 @@ type ValidationSchemas = {
   query?: ZodType;
 };
 
-export function validate(schemas: ValidationSchemas) {
+export default function validateMiddleware(schemas: ValidationSchemas) {
   return (req: Request, _res: Response, next: NextFunction): void => {
     for (const [key, schema] of Object.entries(schemas)) {
       if (!schema) continue;

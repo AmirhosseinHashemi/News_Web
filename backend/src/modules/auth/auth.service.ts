@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { AppError } from "../../errors/AppError.js";
+import AppError from "../../errors/AppError.js";
 import InvalidCredentialError from "../../errors/InvalidCredentialError.js";
 import { generateAccessToken } from "../../lib/jwt.js";
 import { hashRefreshToken } from "../../utils/refreshToken.js";

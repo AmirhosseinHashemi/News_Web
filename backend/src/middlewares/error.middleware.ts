@@ -1,13 +1,13 @@
 import type { Request, Response, NextFunction } from "express";
-import { AppError } from "../errors/AppError.js";
+import AppError from "../errors/AppError.js";
 
-export function errorMiddleware(
+export default function errorMiddleware(
   error: unknown,
   _req: Request,
   res: Response,
   _next: NextFunction
 ): void {
-    // const isDevelopment = process.env.NODE_ENV === "development";
+  // const isDevelopment = process.env.NODE_ENV === "development";
 
   if (error instanceof AppError) {
     res.status(error.statusCode).json({

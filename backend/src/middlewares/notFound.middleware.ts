@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { NotFoundError } from "../errors/NotFound.js";
+import NotFoundError from "../errors/NotFoundError.js";
 
 export default function notFoundMiddleware(
   _req: Request,

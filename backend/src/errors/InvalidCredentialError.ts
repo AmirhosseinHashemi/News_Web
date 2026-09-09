@@ -1,4 +1,4 @@
-import { AppError } from "./AppError.js";
+import AppError from "./AppError.js";
 
 export default class InvalidCredentialError extends AppError {
   constructor(message = "Invalid phone number or password") {

@@ -1,7 +1,7 @@
-import { AppError } from "./AppError.js";
+import AppError from "./AppError.js";
 import { ConfilictErrorOption } from "./error.types.js";
 
-export class ConflictError extends AppError {
+export default class ConflictError extends AppError {
   constructor({
     message = "Resource already exists",
     errors = [],

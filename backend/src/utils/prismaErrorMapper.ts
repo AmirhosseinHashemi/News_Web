@@ -1,5 +1,5 @@
-import { ConflictError } from "../errors/ConflictError.js";
-import { NotFoundError } from "../errors/NotFound.js";
+import ConflictError from "../errors/ConflictError.js";
+import NotFoundError from "../errors/NotFoundError.js";
 import { Prisma } from "../generated/prisma/client.js";
 
 type PrismaDuplicateMeta = {

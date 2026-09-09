@@ -1,6 +1,6 @@
 import { AppErrorOptions, FieldError } from "./error.types.js";
 
-export class AppError extends Error {
+export default class AppError extends Error {
   public readonly statusCode: number;
   public readonly errors: FieldError[];
   public readonly isOperational: boolean;
