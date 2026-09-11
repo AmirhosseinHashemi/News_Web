@@ -23,6 +23,7 @@ export default function authenticateMiddleware(
 
   req.user = {
     id: payload.userId,
+    roleId: payload.roleId,
     role: payload.role,
   };
 

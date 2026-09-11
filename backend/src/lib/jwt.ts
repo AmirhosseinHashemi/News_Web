@@ -4,6 +4,7 @@ import UnauthorizedError from "../errors/UnauthorizedError.js";
 
 type AccessTokenPayload = {
   userId: number;
+  roleId: number;
   role: string;
 };
 
