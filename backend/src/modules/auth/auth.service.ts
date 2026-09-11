@@ -16,7 +16,7 @@ export default class AuthService {
   ) {}
 
   async login({ password, phone }: loginPayload) {
-    const user = await this.userRepository.findByEmail(phone);
+    const user = await this.userRepository.findByPhone(phone);
     if (!user) throw new InvalidCredentialError();
     if (!user.isActive)
       throw new AppError({ message: "User is not active", statusCode: 403 });
@@ -24,7 +24,10 @@ export default class AuthService {
     const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
     if (!isPasswordValid) throw new InvalidCredentialError();
 
-    const accessToken = generateAccessToken({ userId: user.id });
+    const accessToken = generateAccessToken({
+      userId: user.id,
+      role: user.role.name,
+    });
     const { token: refreshToken } = await this.refreshTokenService.create(
       user.id
     );

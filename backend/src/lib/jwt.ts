@@ -4,10 +4,11 @@ import UnauthorizedError from "../errors/UnauthorizedError.js";
 
 type AccessTokenPayload = {
   userId: number;
+  role: string;
 };
 
-export function generateAccessToken({ userId }: AccessTokenPayload) {
-  return jwt.sign({ userId }, env.JWT_ACCESS_SECRET, {
+export function generateAccessToken(payload: AccessTokenPayload) {
+  return jwt.sign(payload, env.JWT_ACCESS_SECRET, {
     expiresIn: env.JWT_ACCESS_EXPIRES_IN,
   });
 }
