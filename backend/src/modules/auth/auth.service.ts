@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import AppError from "../../errors/AppError.js";
 import InvalidCredentialError from "../../errors/InvalidCredentialError.js";
+import NotFoundError from "../../errors/NotFoundError.js";
 import { generateAccessToken } from "../../lib/jwt.js";
 import { hashRefreshToken } from "../../utils/refreshToken.js";
 import RefreshTokenRepository from "../refresh-token/refresh-token.repository.js";
@@ -60,11 +61,19 @@ export default class AuthService {
     if (storedToken.expiresAt < new Date())
       throw new InvalidCredentialError("Invalid token");
 
-    const userId = storedToken.userId;
+    const user = await this.userRepository.findById(storedToken.userId);
+
+    if (!user) throw new NotFoundError("User not found");
 
     const { token: newRefreshToken } =
-      await this.refreshTokenService.rotateRefreshToken(storedToken.id, userId);
-    const accessToken = generateAccessToken({ userId });
+      await this.refreshTokenService.rotateRefreshToken(
+        storedToken.id,
+        user.id
+      );
+    const accessToken = generateAccessToken({
+      userId: user.id,
+      role: user.role.name,
+    });
 
     return {
       accessToken,
