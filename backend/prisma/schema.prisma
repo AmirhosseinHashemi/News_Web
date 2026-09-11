@@ -43,8 +43,8 @@ model User {
   phone         String   @unique
   passwordHash  String
 
-  roleId        Int?
-  role          Role?     @relation(fields: [roleId], references: [id])
+  roleId        Int
+  role          Role     @relation(fields: [roleId], references: [id])
   
   isActive      Boolean  @default(true)
 
