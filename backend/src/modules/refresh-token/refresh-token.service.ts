@@ -44,4 +44,9 @@ export default class RefreshTokenService {
     const hashedToken = hashRefreshToken(token);
     return await this.refreshTokenRepository.findByHash(hashedToken);
   }
+
+  async revokeRefreshToken(token: string) {
+    const hashedToken = hashRefreshToken(token);
+    return await this.refreshTokenRepository.revokeRefreshToken(hashedToken);
+  }
 }

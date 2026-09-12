@@ -48,4 +48,18 @@ export default class RefreshTokenRepository {
 
     return refreshToken;
   }
+
+  async revokeRefreshToken(tokenHash: string) {
+    return execute(() =>
+      this.prisma.refreshToken.update({
+        where: {
+          tokenHash,
+          revokedAt: null,
+        },
+        data: {
+          revokedAt: new Date(),
+        },
+      })
+    );
+  }
 }
