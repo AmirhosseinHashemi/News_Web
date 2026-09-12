@@ -3,7 +3,6 @@ import AppError from "../../errors/AppError.js";
 import InvalidCredentialError from "../../errors/InvalidCredentialError.js";
 import NotFoundError from "../../errors/NotFoundError.js";
 import { generateAccessToken } from "../../lib/jwt.js";
-import { hashRefreshToken } from "../../utils/refreshToken.js";
 import RefreshTokenRepository from "../refresh-token/refresh-token.repository.js";
 import RefreshTokenService from "../refresh-token/refresh-token.service.js";
 import UserRepository from "../user/user.repository.js";
@@ -50,9 +49,7 @@ export default class AuthService {
   async refresh(token: string | undefined) {
     if (!token) throw new InvalidCredentialError("Invalid token");
 
-    const hashedToken = hashRefreshToken(token);
-    const storedToken =
-      await this.refreshTokenRepository.findByHash(hashedToken);
+    const storedToken = await this.refreshTokenService.findToken(token);
 
     if (!storedToken) throw new InvalidCredentialError("Invalid token");
 
