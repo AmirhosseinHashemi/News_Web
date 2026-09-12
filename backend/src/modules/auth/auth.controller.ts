@@ -1,5 +1,8 @@
 import type { Request, Response } from "express";
-import { setRefreshTokenCookie } from "../../utils/cookie.js";
+import {
+  clearRefreshTokenCookie,
+  setRefreshTokenCookie,
+} from "../../utils/cookie.js";
 import { sendSuccess } from "../../utils/response.js";
 import AuthService from "./auth.service.js";
 import { loginPayload } from "./auth.types.js";
@@ -31,5 +34,13 @@ export default class AuthController {
       message: "New token generated successfully",
       data: accessToken,
     });
+  };
+
+  logout = async (req: Request, res: Response) => {
+    const refreshToken = req.cookies.refreshToken as string | undefined;
+    await this.authService.logout(refreshToken);
+
+    clearRefreshTokenCookie(res);
+    sendSuccess(res, { message: "logout successfully" });
   };
 }

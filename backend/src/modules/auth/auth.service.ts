@@ -7,6 +7,7 @@ import RefreshTokenRepository from "../refresh-token/refresh-token.repository.js
 import RefreshTokenService from "../refresh-token/refresh-token.service.js";
 import UserRepository from "../user/user.repository.js";
 import { loginPayload } from "./auth.types.js";
+import UnauthorizedError from "../../errors/UnauthorizedError.js";
 
 export default class AuthService {
   constructor(
@@ -78,5 +79,10 @@ export default class AuthService {
       accessToken,
       refreshToken: newRefreshToken,
     };
+  }
+
+  async logout(token: string | undefined) {
+    if (!token) throw new UnauthorizedError();
+    await this.refreshTokenService.revokeRefreshToken(token);
   }
 }
