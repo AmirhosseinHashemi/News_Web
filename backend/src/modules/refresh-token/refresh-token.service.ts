@@ -39,4 +39,9 @@ export default class RefreshTokenService {
       expiresAt,
     };
   }
+
+  async findToken(token: string) {
+    const hashedToken = hashRefreshToken(token);
+    return await this.refreshTokenRepository.findByHash(hashedToken);
+  }
 }
