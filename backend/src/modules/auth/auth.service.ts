@@ -2,12 +2,12 @@ import bcrypt from "bcrypt";
 import AppError from "../../errors/AppError.js";
 import InvalidCredentialError from "../../errors/InvalidCredentialError.js";
 import NotFoundError from "../../errors/NotFoundError.js";
+import UnauthorizedError from "../../errors/UnauthorizedError.js";
 import { generateAccessToken } from "../../lib/jwt.js";
 import RefreshTokenRepository from "../refresh-token/refresh-token.repository.js";
 import RefreshTokenService from "../refresh-token/refresh-token.service.js";
 import UserRepository from "../user/user.repository.js";
 import { loginPayload } from "./auth.types.js";
-import UnauthorizedError from "../../errors/UnauthorizedError.js";
 
 export default class AuthService {
   constructor(
@@ -84,5 +84,9 @@ export default class AuthService {
   async logout(token: string | undefined) {
     if (!token) throw new UnauthorizedError();
     await this.refreshTokenService.revokeRefreshToken(token);
+  }
+
+  async logoutAll(userId: number) {
+    await this.refreshTokenRepository.revokeAllUserToken(userId);
   }
 }

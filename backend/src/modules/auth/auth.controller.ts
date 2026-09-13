@@ -43,4 +43,11 @@ export default class AuthController {
     clearRefreshTokenCookie(res);
     sendSuccess(res, { message: "logout successfully" });
   };
+
+  logoutAll = async (req: Request, res: Response) => {
+    await this.authService.logoutAll(req.user.id);
+
+    clearRefreshTokenCookie(res);
+    sendSuccess(res, { message: "logout all successfully" });
+  };
 }
