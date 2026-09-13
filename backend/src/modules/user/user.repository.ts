@@ -4,6 +4,15 @@ import { execute } from "../../utils/queryExecuter.js";
 export default class UserRepository {
   constructor(private readonly prisma: PrismaClient) {}
 
+  async findAll() {
+    return execute(() =>
+      this.prisma.user.findMany({
+        omit: { passwordHash: true },
+        include: { role: true },
+      })
+    );
+  }
+
   async findById(id: number) {
     return execute(() =>
       this.prisma.user.findUnique({
