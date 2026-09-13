@@ -62,4 +62,18 @@ export default class RefreshTokenRepository {
       })
     );
   }
+
+  async revokeAllUserToken(userId: number) {
+    return execute(() =>
+      this.prisma.refreshToken.updateMany({
+        where: {
+          userId,
+          revokedAt: null,
+        },
+        data: {
+          revokedAt: new Date(),
+        },
+      })
+    );
+  }
 }
