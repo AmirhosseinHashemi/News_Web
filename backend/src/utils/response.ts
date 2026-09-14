@@ -1,10 +1,12 @@
 import type { Response } from "express";
 
 type Meta = {
-  page: number;
+  currentPage: number;
   limit: number;
-  total: number;
+  totalItems: number;
   totalPages: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
 };
 
 type SuccessResponse<T> = {
