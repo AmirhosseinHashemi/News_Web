@@ -1,14 +1,22 @@
 import type { Request, Response } from "express";
-
-import UserService from "./user.service.js";
 import { sendSuccess } from "../../utils/response.js";
+import UserService from "./user.service.js";
+import { getUsersQuerySchema } from "./users.schema.js";
 
 export default class UserController {
   constructor(private readonly userService: UserService) {}
 
-  getAll = async (_req: Request, res: Response) => {
-    const result = await this.userService.findAll();
+  getAll = async (req: Request, res: Response) => {
+    const { page, limit } = getUsersQuerySchema.parse(req.query);
+    const { users, paginationMeta } = await this.userService.findAll({
+      page,
+      limit,
+    });
 
-    sendSuccess(res, { message: "All users", data: result });
+    sendSuccess(res, {
+      message: "All users",
+      data: users,
+      meta: paginationMeta,
+    });
   };
 }
