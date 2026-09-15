@@ -1,10 +1,12 @@
+import ConflictError from "../../errors/ConflictError.js";
 import NotFoundError from "../../errors/NotFoundError.js";
+import { hashPassword } from "../../lib/bcrypt.js";
 import {
   getPagination,
   getPaginationMeta,
 } from "../../utils/paginationHelpers.js";
 import UserRepository from "./user.repository.js";
-import { FindAllSeriviceParams } from "./user.type.js";
+import { CreateUserPayload, FindAllSeriviceParams } from "./user.type.js";
 
 export default class UserService {
   constructor(private readonly userRepository: UserRepository) {}
@@ -28,5 +30,21 @@ export default class UserService {
     if (!user) throw new NotFoundError("User not found");
 
     return user;
+  }
+
+  async create(payload: CreateUserPayload) {
+    const isExistUser = await this.userRepository.findByPhone(payload.phone);
+
+    if (isExistUser)
+      throw new ConflictError({
+        message: "User with this phone number already exist",
+      });
+
+    const passwordHash = await hashPassword(payload.password);
+
+    return this.userRepository.create({
+      ...payload,
+      password: passwordHash,
+    });
   }
 }

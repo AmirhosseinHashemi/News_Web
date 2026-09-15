@@ -3,6 +3,7 @@ import validateMiddleware from "../../middlewares/validation.middleware.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import { userController } from "./user.module.js";
 import {
+  createUserSchema,
   getUserByIdParamsSchema,
   getUsersQuerySchema,
 } from "./users.schema.js";
@@ -19,6 +20,12 @@ userRouter.get(
   "/:id",
   validateMiddleware({ params: getUserByIdParamsSchema }),
   asyncHandler(userController.getById)
+);
+
+userRouter.post(
+  "/",
+  validateMiddleware({ body: createUserSchema }),
+  asyncHandler(userController.create)
 );
 
 export default userRouter;

@@ -1,6 +1,6 @@
 import { PrismaClient } from "../../generated/prisma/internal/class.js";
 import { execute } from "../../utils/queryExecuter.js";
-import { FindAllRepositoryParams } from "./user.type.js";
+import { CreateUserPayload, FindAllRepositoryParams } from "./user.type.js";
 
 export default class UserRepository {
   constructor(private readonly prisma: PrismaClient) {}
@@ -36,6 +36,31 @@ export default class UserRepository {
   async findByPhone(phone: string) {
     return execute(() =>
       this.prisma.user.findUnique({ where: { phone }, include: { role: true } })
+    );
+  }
+
+  async create({
+    name,
+    email,
+    phone,
+    password,
+    isActive,
+    roleId,
+  }: CreateUserPayload) {
+    return execute(() =>
+      this.prisma.user.create({
+        data: {
+          name,
+          email,
+          phone,
+          isActive,
+          passwordHash: password,
+          roleId,
+        },
+        omit: {
+          passwordHash: true,
+        },
+      })
     );
   }
 }
