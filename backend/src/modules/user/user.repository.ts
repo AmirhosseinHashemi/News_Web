@@ -23,6 +23,9 @@ export default class UserRepository {
     return execute(() =>
       this.prisma.user.findUnique({
         where: { id },
+        omit: {
+          passwordHash: true,
+        },
         include: {
           role: true,
         },

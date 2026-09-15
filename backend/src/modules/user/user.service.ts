@@ -1,3 +1,4 @@
+import NotFoundError from "../../errors/NotFoundError.js";
 import {
   getPagination,
   getPaginationMeta,
@@ -19,5 +20,13 @@ export default class UserService {
     const paginationMeta = getPaginationMeta({ page, limit, totalItems });
 
     return { users, paginationMeta };
+  }
+
+  async findById(id: number) {
+    const user = await this.userRepository.findById(id);
+
+    if (!user) throw new NotFoundError("User not found");
+
+    return user;
   }
 }

@@ -1,7 +1,10 @@
 import type { Request, Response } from "express";
 import { sendSuccess } from "../../utils/response.js";
 import UserService from "./user.service.js";
-import { getUsersQuerySchema } from "./users.schema.js";
+import {
+  getUserByIdParamsSchema,
+  getUsersQuerySchema,
+} from "./users.schema.js";
 
 export default class UserController {
   constructor(private readonly userService: UserService) {}
@@ -18,5 +21,12 @@ export default class UserController {
       data: users,
       meta: paginationMeta,
     });
+  };
+
+  getById = async (req: Request, res: Response) => {
+    const { id } = getUserByIdParamsSchema.parse(req.params);
+    const user = await this.userService.findById(id);
+
+    sendSuccess(res, { message: `User ${id}`, data: user });
   };
 }
