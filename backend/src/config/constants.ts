@@ -12,3 +12,7 @@ export const MIN_PAGE = 1;
 export const DEFAULT_LIMIT = 10;
 export const MIN_LIMIT = 5;
 export const MAX_LIMIT = 100;
+
+export const MIN_LENGTH_PHONE = 11;
+export const MIN_LENGTH_NAME = 2;
+export const MIN_LENGTH_PASSWORD = 4;
