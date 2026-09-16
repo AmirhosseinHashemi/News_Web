@@ -27,7 +27,6 @@ export const updateUserBodySchema = z.object({
   phone: z.string().trim().min(MIN_LENGTH_PHONE).optional(),
   password: z.string().min(MIN_LENGTH_PASSWORD).optional(),
   roleId: z.coerce.number().int().positive().optional(),
-  isActive: z.boolean().optional(),
 });
 
 export const updateUserParamsSchema = z.object({
