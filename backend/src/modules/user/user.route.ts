@@ -6,6 +6,8 @@ import {
   createUserSchema,
   getUserByIdParamsSchema,
   getUsersQuerySchema,
+  updateUserBodySchema,
+  updateUserParamsSchema,
 } from "./users.schema.js";
 
 const userRouter = express.Router();
@@ -26,6 +28,15 @@ userRouter.post(
   "/",
   validateMiddleware({ body: createUserSchema }),
   asyncHandler(userController.create)
+);
+
+userRouter.patch(
+  "/:id",
+  validateMiddleware({
+    body: updateUserBodySchema,
+    params: updateUserParamsSchema,
+  }),
+  asyncHandler(userController.update)
 );
 
 export default userRouter;

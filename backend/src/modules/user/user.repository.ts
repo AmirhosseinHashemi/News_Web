@@ -1,6 +1,10 @@
 import { PrismaClient } from "../../generated/prisma/internal/class.js";
 import { execute } from "../../utils/queryExecuter.js";
-import { CreateUserPayload, FindAllRepositoryParams } from "./user.type.js";
+import {
+  CreateUserPayload,
+  FindAllRepositoryParams,
+  UpdateUserRepositoryParams,
+} from "./user.type.js";
 
 export default class UserRepository {
   constructor(private readonly prisma: PrismaClient) {}
@@ -57,6 +61,20 @@ export default class UserRepository {
           passwordHash: password,
           roleId,
         },
+        omit: {
+          passwordHash: true,
+        },
+      })
+    );
+  }
+
+  async update(userId: number, data: UpdateUserRepositoryParams) {
+    return execute(() =>
+      this.prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data,
         omit: {
           passwordHash: true,
         },

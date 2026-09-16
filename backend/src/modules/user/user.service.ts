@@ -1,12 +1,18 @@
 import ConflictError from "../../errors/ConflictError.js";
 import NotFoundError from "../../errors/NotFoundError.js";
+import ValidationError from "../../errors/ValidationError.js";
 import { hashPassword } from "../../lib/bcrypt.js";
 import {
   getPagination,
   getPaginationMeta,
 } from "../../utils/paginationHelpers.js";
 import UserRepository from "./user.repository.js";
-import { CreateUserPayload, FindAllSeriviceParams } from "./user.type.js";
+import {
+  CreateUserPayload,
+  FindAllSeriviceParams,
+  UpdateUserPayload,
+  UpdateUserRepositoryParams,
+} from "./user.type.js";
 
 export default class UserService {
   constructor(private readonly userRepository: UserRepository) {}
@@ -46,5 +52,21 @@ export default class UserService {
       ...payload,
       password: passwordHash,
     });
+  }
+
+  async update(userId: number, data: UpdateUserPayload) {
+    if (Object.entries(data).length === 0)
+      throw new ValidationError({ message: "There is nothing to update" });
+
+    const { password, ...dataWithoutPassword } = data;
+
+    const updateData: UpdateUserRepositoryParams = {
+      ...dataWithoutPassword,
+      ...(password && {
+        passwordHash: await hashPassword(password),
+      }),
+    };
+
+    return this.userRepository.update(userId, updateData);
   }
 }

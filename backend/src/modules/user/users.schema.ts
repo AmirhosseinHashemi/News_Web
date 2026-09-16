@@ -20,3 +20,16 @@ export const createUserSchema = z.object({
   roleId: z.coerce.number().int().positive(),
   isActive: z.boolean().default(true),
 });
+
+export const updateUserBodySchema = z.object({
+  name: z.string().trim().min(MIN_LENGTH_NAME).optional(),
+  email: z.email().optional(),
+  phone: z.string().trim().min(MIN_LENGTH_PHONE).optional(),
+  password: z.string().min(MIN_LENGTH_PASSWORD).optional(),
+  roleId: z.coerce.number().int().positive().optional(),
+  isActive: z.boolean().optional(),
+});
+
+export const updateUserParamsSchema = z.object({
+  id: z.coerce.number().int().positive(),
+});

@@ -5,6 +5,8 @@ import {
   createUserSchema,
   getUserByIdParamsSchema,
   getUsersQuerySchema,
+  updateUserBodySchema,
+  updateUserParamsSchema,
 } from "./users.schema.js";
 
 export default class UserController {
@@ -33,12 +35,24 @@ export default class UserController {
 
   create = async (req: Request, res: Response) => {
     const payload = createUserSchema.parse(req.body);
-    
+
     const newUser = await this.userService.create(payload);
 
     sendSuccess(res, {
       message: "New user created successfully",
       data: newUser,
+    });
+  };
+
+  update = async (req: Request, res: Response) => {
+    const { id } = updateUserParamsSchema.parse(req.params);
+    const payload = updateUserBodySchema.parse(req.body);
+
+    const updatedUser = await this.userService.update(id, payload);
+
+    sendSuccess(res, {
+      message: "User updated successfully",
+      data: updatedUser,
     });
   };
 }

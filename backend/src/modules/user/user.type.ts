@@ -1,5 +1,5 @@
 import z from "zod";
-import { createUserSchema } from "./users.schema.js";
+import { createUserSchema, updateUserBodySchema } from "./users.schema.js";
 
 export type FindAllSeriviceParams = {
   page: number;
@@ -12,3 +12,9 @@ export type FindAllRepositoryParams = {
 };
 
 export type CreateUserPayload = z.infer<typeof createUserSchema>;
+
+export type UpdateUserPayload = z.infer<typeof updateUserBodySchema>;
+
+export type UpdateUserRepositoryParams = Omit<UpdateUserPayload, "password"> & {
+  passwordHash?: string;
+};
