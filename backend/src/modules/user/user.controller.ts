@@ -7,6 +7,8 @@ import {
   getUsersQuerySchema,
   updateUserBodySchema,
   updateUserParamsSchema,
+  updateUserStatusBodySchema,
+  updateUserStatusParamsSchema,
 } from "./users.schema.js";
 
 export default class UserController {
@@ -52,6 +54,24 @@ export default class UserController {
 
     sendSuccess(res, {
       message: "User updated successfully",
+      data: updatedUser,
+    });
+  };
+
+  updateStatus = async (req: Request, res: Response) => {
+    const { id: userToUpdateId } = updateUserStatusParamsSchema.parse(
+      req.params
+    );
+    const payload = updateUserStatusBodySchema.parse(req.body);
+
+    const updatedUser = await this.userService.updateStatus(
+      userToUpdateId,
+      req.user.id,
+      payload
+    );
+
+    sendSuccess(res, {
+      message: "User status changed successfully",
       data: updatedUser,
     });
   };

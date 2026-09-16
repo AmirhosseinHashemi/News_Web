@@ -8,6 +8,8 @@ import {
   getUsersQuerySchema,
   updateUserBodySchema,
   updateUserParamsSchema,
+  updateUserStatusBodySchema,
+  updateUserStatusParamsSchema,
 } from "./users.schema.js";
 
 const userRouter = express.Router();
@@ -37,6 +39,15 @@ userRouter.patch(
     params: updateUserParamsSchema,
   }),
   asyncHandler(userController.update)
+);
+
+userRouter.patch(
+  "/:id/status",
+  validateMiddleware({
+    body: updateUserStatusBodySchema,
+    params: updateUserStatusParamsSchema,
+  }),
+  asyncHandler(userController.updateStatus)
 );
 
 export default userRouter;

@@ -1,4 +1,5 @@
 import ConflictError from "../../errors/ConflictError.js";
+import ForbiddenError from "../../errors/ForbiddenError.js";
 import NotFoundError from "../../errors/NotFoundError.js";
 import ValidationError from "../../errors/ValidationError.js";
 import { hashPassword } from "../../lib/bcrypt.js";
@@ -12,6 +13,7 @@ import {
   FindAllSeriviceParams,
   UpdateUserPayload,
   UpdateUserRepositoryParams,
+  UpdateUserStatusPayload,
 } from "./user.type.js";
 
 export default class UserService {
@@ -68,5 +70,19 @@ export default class UserService {
     };
 
     return this.userRepository.update(userId, updateData);
+  }
+
+  async updateStatus(
+    userToUpdateId: number,
+    userId: number,
+    payload: UpdateUserStatusPayload
+  ) {
+    if (userToUpdateId === userId) throw new ForbiddenError();
+
+    const isExistUser = await this.userRepository.findById(userToUpdateId);
+
+    if (!isExistUser) throw new NotFoundError("User not found");
+
+    return this.userRepository.updateStatus(userToUpdateId, payload.isActive);
   }
 }

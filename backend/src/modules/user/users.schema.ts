@@ -32,3 +32,11 @@ export const updateUserBodySchema = z.object({
 export const updateUserParamsSchema = z.object({
   id: z.coerce.number().int().positive(),
 });
+
+export const updateUserStatusBodySchema = z.object({
+  isActive: z.boolean(),
+});
+
+export const updateUserStatusParamsSchema = z.object({
+  id: z.coerce.number().int().positive(),
+});
