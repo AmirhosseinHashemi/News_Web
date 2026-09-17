@@ -1,5 +1,4 @@
 import bcrypt from "bcrypt";
-import AppError from "../../errors/AppError.js";
 import ForbiddenError from "../../errors/ForbiddenError.js";
 import InvalidCredentialError from "../../errors/InvalidCredentialError.js";
 import NotFoundError from "../../errors/NotFoundError.js";
