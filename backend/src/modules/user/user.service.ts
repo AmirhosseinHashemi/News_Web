@@ -92,7 +92,10 @@ export default class UserService {
     if (payload.isActive === true)
       return await this.userRepository.activateUser(userToUpdateId);
 
-    if (payload.isActive === false)
-      return this.userRepository.deactivateUser(userToUpdateId);
+    if (payload.isActive === false) {
+      const [user, _] =
+        await this.userRepository.deactivateUser(userToUpdateId);
+      return user;
+    }
   }
 }
