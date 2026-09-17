@@ -1,6 +1,6 @@
 import express from "express";
 import authenticateMiddleware from "../middlewares/authenticate.middleware.js";
-import authRouter from "../modules/auth/auth.router.js";
+import authRouter from "../modules/auth/auth.route.js";
 import userRouter from "../modules/user/user.route.js";
 import healthRouter from "./health.js";
 
