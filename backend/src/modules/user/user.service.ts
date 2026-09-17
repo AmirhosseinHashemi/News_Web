@@ -79,10 +79,14 @@ export default class UserService {
   ) {
     if (userToUpdateId === userId) throw new ForbiddenError();
 
-    const isExistUser = await this.userRepository.findById(userToUpdateId);
+    const user = await this.userRepository.findById(userToUpdateId);
 
-    if (!isExistUser) throw new NotFoundError("User not found");
+    if (!user) throw new NotFoundError("User not found");
 
-    return this.userRepository.updateStatus(userToUpdateId, payload.isActive);
+    if (payload.isActive === true)
+      return await this.userRepository.activateUser(userToUpdateId);
+
+    if (payload.isActive === false)
+      return this.userRepository.deactivateUser(userToUpdateId);
   }
 }

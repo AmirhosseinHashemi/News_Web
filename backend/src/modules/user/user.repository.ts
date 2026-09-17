@@ -82,19 +82,47 @@ export default class UserRepository {
     );
   }
 
-  async updateStatus(userId: number, isActive: boolean) {
+  async activateUser(userId: number) {
     return execute(() =>
       this.prisma.user.update({
         where: {
           id: userId,
         },
         data: {
-          isActive,
+          isActive: true,
         },
         omit: {
           passwordHash: true,
         },
       })
+    );
+  }
+
+  async deactivateUser(userId: number) {
+    return execute(() =>
+      this.prisma.$transaction([
+        this.prisma.user.update({
+          where: {
+            id: userId,
+          },
+          data: {
+            isActive: false,
+          },
+          omit: {
+            passwordHash: true,
+          },
+        }),
+
+        this.prisma.refreshToken.updateMany({
+          where: {
+            userId,
+            revokedAt: null,
+          },
+          data: {
+            revokedAt: new Date(),
+          },
+        }),
+      ])
     );
   }
 }
