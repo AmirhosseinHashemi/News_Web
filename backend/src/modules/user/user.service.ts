@@ -60,6 +60,12 @@ export default class UserService {
     if (Object.entries(data).length === 0)
       throw new ValidationError({ message: "There is nothing to update" });
 
+    if (data.phone !== undefined) {
+      const user = await this.userRepository.findByPhone(data.phone);
+      if (user && user.id !== userId)
+        throw new ConflictError({ message: "Phone number is already in use" });
+    }
+
     const { password, ...dataWithoutPassword } = data;
 
     const updateData: UpdateUserRepositoryParams = {
