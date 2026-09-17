@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import AppError from "../../errors/AppError.js";
+import ForbiddenError from "../../errors/ForbiddenError.js";
 import InvalidCredentialError from "../../errors/InvalidCredentialError.js";
 import NotFoundError from "../../errors/NotFoundError.js";
 import UnauthorizedError from "../../errors/UnauthorizedError.js";
@@ -63,6 +64,8 @@ export default class AuthService {
     const user = await this.userRepository.findById(storedToken.userId);
 
     if (!user) throw new NotFoundError("User not found");
+
+    if (user.isActive === false) throw new ForbiddenError("User is not active");
 
     const { token: newRefreshToken } =
       await this.refreshTokenService.rotateRefreshToken(
