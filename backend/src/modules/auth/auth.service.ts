@@ -20,8 +20,7 @@ export default class AuthService {
   async login({ password, phone }: loginPayload) {
     const user = await this.userRepository.findByPhone(phone);
     if (!user) throw new InvalidCredentialError();
-    if (!user.isActive)
-      throw new AppError({ message: "User is not active", statusCode: 403 });
+    if (user.isActive === false) throw new ForbiddenError("User is not active");
 
     const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
     if (!isPasswordValid) throw new InvalidCredentialError();
