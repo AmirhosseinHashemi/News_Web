@@ -1,7 +1,10 @@
-import { sendSuccess } from "../../utils/response.js";
-import { createCategorySchema } from "./category.schema.js";
-import CategoryService from "./category.service.js";
 import type { Request, Response } from "express";
+import { sendSuccess } from "../../utils/response.js";
+import {
+  createCategorySchema,
+  getAllCategoriesQuerySchema,
+} from "./category.schema.js";
+import CategoryService from "./category.service.js";
 
 export default class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
@@ -13,6 +16,18 @@ export default class CategoryController {
     sendSuccess(res, {
       message: "New category created successfully",
       data: newCategory,
+    });
+  };
+
+  getAll = async (req: Request, res: Response) => {
+    const query = getAllCategoriesQuerySchema.parse(req.query);
+    const { categories, paginationMeta } =
+      await this.categoryService.findAll(query);
+
+    sendSuccess(res, {
+      message: "All categories",
+      data: categories,
+      meta: paginationMeta,
     });
   };
 }
