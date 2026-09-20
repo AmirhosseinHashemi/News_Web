@@ -7,18 +7,19 @@ import {
   getAllCategoriesQuerySchema,
 } from "./category.schema.js";
 
-const categoryRouter = express.Router();
+const publicCategoryRouter = express.Router();
+const adminCategoryRouter = express.Router();
 
-categoryRouter.post(
+adminCategoryRouter.post(
   "/",
   validateMiddleware({ body: createCategorySchema }),
   asyncHandler(categoryController.create)
 );
 
-categoryRouter.get(
+publicCategoryRouter.get(
   "/",
   validateMiddleware({ query: getAllCategoriesQuerySchema }),
   asyncHandler(categoryController.getAll)
 );
 
-export default categoryRouter;
+export { publicCategoryRouter, adminCategoryRouter };

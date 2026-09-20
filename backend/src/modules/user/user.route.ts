@@ -12,27 +12,28 @@ import {
   updateUserStatusParamsSchema,
 } from "./users.schema.js";
 
-const userRouter = express.Router();
+const publicUserRouter = express.Router();
+const adminUserRouter = express.Router();
 
-userRouter.get(
+publicUserRouter.get(
   "/",
   validateMiddleware({ query: getUsersQuerySchema }),
   asyncHandler(userController.getAll)
 );
 
-userRouter.get(
+adminUserRouter.get(
   "/:id",
   validateMiddleware({ params: getUserByIdParamsSchema }),
   asyncHandler(userController.getById)
 );
 
-userRouter.post(
+adminUserRouter.post(
   "/",
   validateMiddleware({ body: createUserSchema }),
   asyncHandler(userController.create)
 );
 
-userRouter.patch(
+adminUserRouter.patch(
   "/:id",
   validateMiddleware({
     body: updateUserBodySchema,
@@ -41,7 +42,7 @@ userRouter.patch(
   asyncHandler(userController.update)
 );
 
-userRouter.patch(
+adminUserRouter.patch(
   "/:id/status",
   validateMiddleware({
     body: updateUserStatusBodySchema,
@@ -50,4 +51,4 @@ userRouter.patch(
   asyncHandler(userController.updateStatus)
 );
 
-export default userRouter;
+export { adminUserRouter, publicUserRouter };
