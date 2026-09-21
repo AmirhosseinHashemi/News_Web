@@ -59,6 +59,16 @@ export default class CategoryRepository {
     );
   }
 
+  async findById(id: number) {
+    return execute(() =>
+      this.prisma.category.findUnique({
+        where: {
+          id,
+        },
+      })
+    );
+  }
+
   async create({ name, slug, description }: CreateCategoryRepositoryData) {
     return execute(() =>
       this.prisma.category.create({

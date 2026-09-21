@@ -1,4 +1,5 @@
 import ConflictError from "../../errors/ConflictError.js";
+import NotFoundError from "../../errors/NotFoundError.js";
 import {
   getPagination,
   getPaginationMeta,
@@ -37,5 +38,13 @@ export default class CategoryService {
     const paginationMeta = getPaginationMeta({ page, limit, totalItems });
 
     return { categories, paginationMeta };
+  }
+
+  async findById(id: number) {
+    const category = await this.categoryRepository.findById(id);
+
+    if (!category) throw new NotFoundError("Category not found");
+
+    return category;
   }
 }

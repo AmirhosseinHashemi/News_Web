@@ -5,6 +5,7 @@ import {
   getAllCategoriesQuerySchema,
 } from "./category.schema.js";
 import CategoryService from "./category.service.js";
+import { idParamsSchema } from "../../common/schema.js";
 
 export default class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
@@ -29,5 +30,12 @@ export default class CategoryController {
       data: categories,
       meta: paginationMeta,
     });
+  };
+
+  findById = async (req: Request, res: Response) => {
+    const { id } = idParamsSchema.parse(req.params);
+    const category = await this.categoryService.findById(id);
+
+    sendSuccess(res, { message: `Category ${id}`, data: category });
   };
 }

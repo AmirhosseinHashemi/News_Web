@@ -1,4 +1,5 @@
 import express from "express";
+import { idParamsSchema } from "../../common/schema.js";
 import validateMiddleware from "../../middlewares/validation.middleware.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import { categoryController } from "./category.module.js";
@@ -16,10 +17,17 @@ adminCategoryRouter.post(
   asyncHandler(categoryController.create)
 );
 
+adminCategoryRouter.get(
+  "/:id",
+  validateMiddleware({ params: idParamsSchema }),
+  asyncHandler(categoryController.findById)
+);
+
 publicCategoryRouter.get(
   "/",
   validateMiddleware({ query: getAllCategoriesQuerySchema }),
   asyncHandler(categoryController.getAll)
 );
 
-export { publicCategoryRouter, adminCategoryRouter };
+export { adminCategoryRouter, publicCategoryRouter };
+
