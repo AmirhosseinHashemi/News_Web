@@ -16,3 +16,7 @@ export const paginationQuerySchema = z.object({
     .max(MAX_LIMIT)
     .default(DEFAULT_LIMIT),
 });
+
+export const idParamsSchema = z.object({
+  id: z.coerce.number().int().min(1),
+});
