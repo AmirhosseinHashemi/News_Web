@@ -12,22 +12,9 @@ datasource db {
   provider = "postgresql"
 }
 
-enum PostType {
-  NEWS
-  ANNOUNCEMENT
-  GENERAL
-}
-
 enum PostStatus {
   DRAFT
   PUBLISHED
-}
-
-enum PostLocation {
-  LOCAL
-  KASHAN
-  NATIONAL
-  INTERNATIONAL
 }
 
 enum MediaType {
@@ -113,6 +100,35 @@ model Category {
   @@map("categories")
 }
 
+model PostType {
+  id        Int      @id @default(autoincrement())
+
+  name      String   @unique
+  slug      String   @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  posts     Post[]
+
+  @@map("post_types")
+}
+
+model PostLocation {
+  id        Int      @id @default(autoincrement())
+
+  name      String   @unique
+  slug      String   @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  posts     Post[]
+
+  @@map("post_locations")
+}
+
+
 model Post {
   id              Int          @id @default(autoincrement())
 
@@ -121,8 +137,11 @@ model Post {
   excerpt         String?
   content         String
 
-  type            PostType
-  location        PostLocation?
+  typeId          Int
+  locationId      Int?
+
+  type            PostType      @relation(fields: [typeId], references: [id])
+  location        PostLocation? @relation(fields: [locationId], references: [id])
 
   status          PostStatus   @default(DRAFT)
   publishedAt     DateTime?
