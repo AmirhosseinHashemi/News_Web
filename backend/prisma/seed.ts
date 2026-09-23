@@ -2,6 +2,40 @@ import bcrypt from "bcrypt";
 import { BCRYPT_SALT_ROUNDS } from "../src/config/constants.js";
 import { prisma } from "../src/lib/prisma.js";
 
+const postTypes = [
+  {
+    name: "اخبار",
+    slug: "اخبار",
+  },
+  {
+    name: "اطلاعیه",
+    slug: "اطلاعیه",
+  },
+  {
+    name: "عمومی",
+    slug: "عمومی",
+  },
+];
+
+const postLocations = [
+  {
+    name: "محلی",
+    slug: "محلی",
+  },
+  {
+    name: "کاشان",
+    slug: "کاشان",
+  },
+  {
+    name: "ملی",
+    slug: "ملی",
+  },
+  {
+    name: "بین‌المللی",
+    slug: "بین‌المللی",
+  },
+];
+
 const permissions = [
   // Users
   {
@@ -242,6 +276,46 @@ export async function seedRolePermissions(
   }
 }
 
+async function seedPostTypes() {
+  for (const type of postTypes) {
+    await prisma.postType.upsert({
+      where: {
+        slug: type.slug,
+      },
+      update: {
+        name: type.name,
+      },
+      create: type,
+    });
+  }
+
+  return prisma.postType.findMany({
+    orderBy: {
+      id: "asc",
+    },
+  });
+}
+
+async function seedPostLocations() {
+  for (const location of postLocations) {
+    await prisma.postLocation.upsert({
+      where: {
+        slug: location.slug,
+      },
+      update: {
+        name: location.name,
+      },
+      create: location,
+    });
+  }
+
+  return prisma.postLocation.findMany({
+    orderBy: {
+      id: "asc",
+    },
+  });
+}
+
 async function main() {
   console.log("🌱 Starting seed...");
 
@@ -255,8 +329,13 @@ async function main() {
   console.log("✅ Role permissions seeded.");
 
   const admin = await seedAdminUser(adminRole.id);
-
   console.log(`✅ Admin user ready: ${admin.email}`);
+
+  const types = await seedPostTypes();
+  console.log(`✅ ${types.length} post types seeded.`);
+
+  const locations = await seedPostLocations();
+  console.log(`✅ ${locations.length} post locations seeded.`);
 
   console.log("🌱 Seed completed successfully.");
 }
