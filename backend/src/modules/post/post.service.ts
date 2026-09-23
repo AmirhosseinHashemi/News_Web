@@ -1,4 +1,5 @@
 import ConflictError from "../../errors/ConflictError.js";
+import NotFoundError from "../../errors/NotFoundError.js";
 import { generateSlug } from "../../utils/slug.js";
 import type PostRepository from "./post.repository.js";
 import { CreatePostPayload } from "./post.type.js";
@@ -18,5 +19,13 @@ export default class PostService {
       slug,
       authorId,
     });
+  }
+
+  async findById(id: number) {
+    const post = await this.postRepository.findById(id);
+
+    if (!post || post.deletedAt) throw new NotFoundError("پست یافت نشد");
+
+    return post;
   }
 }

@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import { sendSuccess } from "../../utils/response.js";
 import { createPostSchema } from "./post.schema.js";
 import PostService from "./post.service.js";
+import { idParamsSchema } from "../../common/schema.js";
 
 export default class PostController {
   constructor(private readonly postService: PostService) {}
@@ -15,5 +16,12 @@ export default class PostController {
       message: "پست پیش نویس جدید با موفقیت ایجاد شد",
       data: newPost,
     });
+  };
+
+  findById = async (req: Request, res: Response) => {
+    const { id } = idParamsSchema.parse(req.params);
+    const post = await this.postService.findById(id);
+
+    sendSuccess(res, { message: `پست شماره ${id}`, data: post });
   };
 }

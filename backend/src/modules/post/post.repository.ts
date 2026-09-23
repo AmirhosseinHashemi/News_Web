@@ -22,4 +22,29 @@ export default class PostRepository {
       })
     );
   }
+
+  async findById(id: number) {
+    return execute(() =>
+      this.prisma.post.findUnique({
+        where: {
+          id,
+        },
+        include: {
+          author: {
+            omit: {
+              passwordHash: true,
+            },
+          },
+          category: true,
+          location: true,
+          type: true,
+          media: {
+            orderBy: {
+              sortOrder: "asc",
+            },
+          },
+        },
+      })
+    );
+  }
 }
