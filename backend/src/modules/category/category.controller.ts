@@ -1,11 +1,12 @@
 import type { Request, Response } from "express";
+import { idParamsSchema } from "../../common/schema.js";
 import { sendSuccess } from "../../utils/response.js";
 import {
   createCategorySchema,
   getAllCategoriesQuerySchema,
+  updateCategorySchema,
 } from "./category.schema.js";
 import CategoryService from "./category.service.js";
-import { idParamsSchema } from "../../common/schema.js";
 
 export default class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
@@ -37,5 +38,16 @@ export default class CategoryController {
     const category = await this.categoryService.findById(id);
 
     sendSuccess(res, { message: `Category ${id}`, data: category });
+  };
+
+  update = async (req: Request, res: Response) => {
+    const { id } = idParamsSchema.parse(req.params);
+    const payload = updateCategorySchema.parse(req.body);
+
+    const updeatedCategory = await this.categoryService.update(id, payload);
+    sendSuccess(res, {
+      message: `category with id ${id} updated successully`,
+      data: updeatedCategory,
+    });
   };
 }

@@ -9,3 +9,8 @@ export const createCategorySchema = z.object({
 export const getAllCategoriesQuerySchema = paginationQuerySchema.extend({
   search: z.string().trim().optional(),
 });
+
+export const updateCategorySchema = z.object({
+  name: z.string().trim().min(2).max(100).optional(),
+  description: z.string().trim().max(500).optional(),
+});

@@ -6,6 +6,7 @@ import { categoryController } from "./category.module.js";
 import {
   createCategorySchema,
   getAllCategoriesQuerySchema,
+  updateCategorySchema,
 } from "./category.schema.js";
 
 const publicCategoryRouter = express.Router();
@@ -29,5 +30,10 @@ publicCategoryRouter.get(
   asyncHandler(categoryController.getAll)
 );
 
-export { adminCategoryRouter, publicCategoryRouter };
+adminCategoryRouter.patch(
+  "/:id",
+  validateMiddleware({ params: idParamsSchema, body: updateCategorySchema }),
+  asyncHandler(categoryController.update)
+);
 
+export { adminCategoryRouter, publicCategoryRouter };

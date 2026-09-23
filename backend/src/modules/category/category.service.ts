@@ -1,5 +1,6 @@
 import ConflictError from "../../errors/ConflictError.js";
 import NotFoundError from "../../errors/NotFoundError.js";
+import ValidationError from "../../errors/ValidationError.js";
 import {
   getPagination,
   getPaginationMeta,
@@ -9,6 +10,7 @@ import CategoryRepository from "./category.repository.js";
 import type {
   CreateCategoryPayload,
   FindAllCategoriesServiceParams,
+  UpdateCategoryData,
 } from "./category.type.js";
 
 export default class CategoryService {
@@ -46,5 +48,37 @@ export default class CategoryService {
     if (!category) throw new NotFoundError("Category not found");
 
     return category;
+  }
+
+  async update(id: number, payload: UpdateCategoryData) {
+    if (Object.entries(payload).length === 0)
+      throw new ValidationError({ message: "There is nothing to update" });
+
+    const category = await this.categoryRepository.findById(id);
+
+    if (!category) throw new NotFoundError("Category not found");
+
+    let slug: string | undefined;
+
+    if (payload.name && payload.name !== category.name) {
+      const existingName = await this.categoryRepository.findByName(
+        payload.name
+      );
+
+      if (existingName && existingName.id !== id) {
+        throw new ConflictError({ message: "Category name already exists" });
+      }
+
+      slug = generateSlug(payload.name);
+      const existingSlug = await this.categoryRepository.findBySlug(slug);
+      if (existingSlug && existingSlug.id !== id) {
+        throw new ConflictError({ message: "Category slug already exists" });
+      }
+    }
+
+    return this.categoryRepository.update(id, {
+      ...payload,
+      ...(slug && { slug }),
+    });
   }
 }

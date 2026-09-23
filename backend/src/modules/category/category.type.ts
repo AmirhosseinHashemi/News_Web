@@ -21,3 +21,9 @@ export type FindAllCategoriesRepositoryParams = {
 export type FindAllCategoriesServiceParams = z.infer<
   typeof getAllCategoriesQuerySchema
 >;
+
+export type UpdateCategoryData = {
+  name?: string;
+  slug?: string;
+  description?: string;
+};

@@ -4,6 +4,7 @@ import { execute } from "../../utils/queryExecuter.js";
 import {
   CreateCategoryRepositoryData,
   FindAllCategoriesRepositoryParams,
+  UpdateCategoryData,
 } from "./category.type.js";
 
 const CATEGORY_SEARCH_FIELDS = [
@@ -77,6 +78,17 @@ export default class CategoryRepository {
           slug,
           description,
         },
+      })
+    );
+  }
+
+  async update(id: number, data: UpdateCategoryData) {
+    return execute(() =>
+      this.prisma.category.update({
+        where: {
+          id,
+        },
+        data,
       })
     );
   }
