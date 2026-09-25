@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { paginationQuerySchema } from "../../common/schema.js";
 
 export const createPostSchema = z.object({
   title: z
@@ -36,3 +37,6 @@ export const createPostSchema = z.object({
   expiresAt: z.coerce.date().optional(),
 });
 
+export const getAllPostsQuerySchema = paginationQuerySchema.extend({
+  search: z.string().trim().optional(),
+});

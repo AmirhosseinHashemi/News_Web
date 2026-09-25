@@ -3,9 +3,17 @@ import { idParamsSchema } from "../../common/schema.js";
 import validateMiddleware from "../../middlewares/validation.middleware.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import { postController } from "./post.module.js";
-import { createPostSchema } from "./post.schema.js";
+import { createPostSchema, getAllPostsQuerySchema } from "./post.schema.js";
 
 const adminPostRouter = express.Router();
+
+adminPostRouter.get(
+  "/",
+  validateMiddleware({
+    query: getAllPostsQuerySchema,
+  }),
+  asyncHandler(postController.getAll)
+);
 
 adminPostRouter.post(
   "/",
@@ -24,4 +32,3 @@ adminPostRouter.get(
 );
 
 export { adminPostRouter };
-

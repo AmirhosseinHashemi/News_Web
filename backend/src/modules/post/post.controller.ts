@@ -1,11 +1,18 @@
 import type { Request, Response } from "express";
 import { sendSuccess } from "../../utils/response.js";
-import { createPostSchema } from "./post.schema.js";
+import { createPostSchema, getAllPostsQuerySchema } from "./post.schema.js";
 import PostService from "./post.service.js";
 import { idParamsSchema } from "../../common/schema.js";
 
 export default class PostController {
   constructor(private readonly postService: PostService) {}
+
+  getAll = async (req: Request, res: Response) => {
+    const queries = getAllPostsQuerySchema.parse(req.query);
+    const posts = await this.postService.findAll(queries);
+
+    sendSuccess(res, { message: "لیست پست ها", data: posts });
+  };
 
   createDraft = async (req: Request, res: Response) => {
     const authorId = req.user.id;
