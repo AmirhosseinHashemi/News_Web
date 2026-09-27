@@ -52,4 +52,13 @@ adminPostRouter.patch(
   asyncHandler(postController.publish)
 );
 
+adminPostRouter.delete(
+  "/:id",
+  validateMiddleware({
+    params: idParamsSchema,
+  }),
+  asyncHandler(postController.softDelete)
+);
+
 export { adminPostRouter };
+

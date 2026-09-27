@@ -123,4 +123,17 @@ export default class PostRepository {
       })
     );
   }
+
+  async softDelete(id: number) {
+    return execute(() =>
+      this.prisma.post.update({
+        where: {
+          id,
+        },
+        data: {
+          deletedAt: new Date(),
+        },
+      })
+    );
+  }
 }

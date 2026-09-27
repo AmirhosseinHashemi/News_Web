@@ -58,4 +58,11 @@ export default class PostController {
 
     sendSuccess(res, { message: "پست با موفقیت منتشر شد", data: post });
   };
+
+  softDelete = async (req: Request, res: Response) => {
+    const { id } = idParamsSchema.parse(req.params);
+    await this.postService.softDelete(id);
+
+    sendSuccess(res, { message: `پست شماره ${id} با موفقیت حذف شد` });
+  };
 }

@@ -82,4 +82,13 @@ export default class PostService {
 
     return this.postRepository.publish(id);
   }
+
+  async softDelete(id: number) {
+    const existingPost = await this.postRepository.findById(id);
+
+    if (!existingPost || existingPost.deletedAt)
+      throw new NotFoundError("پست یافت نشد");
+
+    return this.postRepository.softDelete(id);
+  }
 }
