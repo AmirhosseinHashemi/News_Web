@@ -6,18 +6,28 @@ import {
 } from "../../utils/paginationHelpers.js";
 import { generateSlug } from "../../utils/slug.js";
 import type PostRepository from "./post.repository.js";
-import { CreatePostPayload, FindAllPostQueris } from "./post.type.js";
+import { CreatePostPayload, FindAllPostQueries } from "./post.type.js";
 
 export default class PostService {
   constructor(private readonly postRepository: PostRepository) {}
 
-  async findAll({ page, limit, search }: FindAllPostQueris) {
+  async findAll({
+    page,
+    limit,
+    search,
+    categoryId,
+    locationId,
+    typeId,
+  }: FindAllPostQueries) {
     const { skip, take } = getPagination(page, limit);
 
     const [posts, totalItems] = await this.postRepository.findAll({
       skip,
       take,
       search,
+      categoryId,
+      locationId,
+      typeId,
     });
 
     const paginationMeta = getPaginationMeta({ page, limit, totalItems });

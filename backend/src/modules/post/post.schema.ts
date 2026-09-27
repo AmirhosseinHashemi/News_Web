@@ -39,4 +39,7 @@ export const createPostSchema = z.object({
 
 export const getAllPostsQuerySchema = paginationQuerySchema.extend({
   search: z.string().trim().optional(),
+  locationId: z.coerce.number().int().positive().optional(),
+  categoryId: z.coerce.number().int().positive().optional(),
+  typeId: z.coerce.number().int().positive().optional(),
 });

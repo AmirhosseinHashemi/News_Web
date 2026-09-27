@@ -8,10 +8,9 @@ export type CreatePostData = CreatePostPayload & {
   authorId: number;
 };
 
-export type FindAllPostsData = {
+export type FindAllPostQueries = z.infer<typeof getAllPostsQuerySchema>;
+
+export type FindAllPostsData = Omit<FindAllPostQueries, "page" | "limit"> & {
   skip: number;
   take: number;
-  search?: string;
 };
-
-export type FindAllPostQueris = z.infer<typeof getAllPostsQuerySchema>;

@@ -11,9 +11,19 @@ const POST_SEARCH_FIELDS = [
 export default class PostRepository {
   constructor(private readonly prisma: PrismaClient) {}
 
-  async findAll({ skip, take, search }: FindAllPostsData) {
+  async findAll({
+    skip,
+    take,
+    search,
+    categoryId,
+    locationId,
+    typeId,
+  }: FindAllPostsData) {
     const where: Prisma.PostWhereInput = {
       deletedAt: null,
+      ...(categoryId && { categoryId }),
+      ...(locationId && { locationId }),
+      ...(typeId && { typeId }),
     };
 
     if (search) {
@@ -31,6 +41,9 @@ export default class PostRepository {
           where,
           skip,
           take,
+          orderBy: {
+            createdAt: "desc",
+          },
         }),
         this.prisma.post.count({
           where,
