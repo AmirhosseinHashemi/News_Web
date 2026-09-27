@@ -6,7 +6,11 @@ import {
 } from "../../utils/paginationHelpers.js";
 import { generateSlug } from "../../utils/slug.js";
 import type PostRepository from "./post.repository.js";
-import { CreatePostPayload, FindAllPostQueries } from "./post.type.js";
+import {
+  CreatePostPayload,
+  FindAllPostQueries,
+  UpdatePostPayload,
+} from "./post.type.js";
 
 export default class PostService {
   constructor(private readonly postRepository: PostRepository) {}
@@ -55,5 +59,14 @@ export default class PostService {
     if (!post || post.deletedAt) throw new NotFoundError("پست یافت نشد");
 
     return post;
+  }
+
+  async update(id: number, payload: UpdatePostPayload) {
+    const existingPost = await this.postRepository.findById(id);
+
+    if (!existingPost || existingPost.deletedAt)
+      throw new NotFoundError("پست پیدا نشد");
+
+    return this.postRepository.update(id, payload);
   }
 }

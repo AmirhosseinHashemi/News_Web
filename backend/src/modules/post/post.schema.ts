@@ -43,3 +43,33 @@ export const getAllPostsQuerySchema = paginationQuerySchema.extend({
   categoryId: z.coerce.number().int().positive().optional(),
   typeId: z.coerce.number().int().positive().optional(),
 });
+
+export const updatePostSchema = z.object({
+  title: z
+    .string()
+    .trim()
+    .min(1, "عنوان اجباری میباشد")
+    .max(200, "عنوان باید حداکثر 200 کاراکتر باشد")
+    .optional(),
+
+  excerpt: z
+    .string()
+    .trim()
+    .max(500, "خلاصه باید حداکثر 500 کاراکتر باشد")
+    .nullable()
+    .optional(),
+
+  content: z.string().trim().min(1, "محتوا اجباری میباشد").optional(),
+
+  typeId: z.coerce.number().int().positive().optional(),
+
+  locationId: z.coerce.number().int().positive().nullable().optional(),
+
+  categoryId: z.coerce.number().int().positive().optional(),
+
+  metaTitle: z.string().trim().max(200).nullable().optional(),
+
+  metaDescription: z.string().trim().max(500).nullable().optional(),
+
+  expiresAt: z.coerce.date().nullable().optional(),
+});

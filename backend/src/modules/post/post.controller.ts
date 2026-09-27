@@ -1,8 +1,12 @@
 import type { Request, Response } from "express";
-import { sendSuccess } from "../../utils/response.js";
-import { createPostSchema, getAllPostsQuerySchema } from "./post.schema.js";
-import PostService from "./post.service.js";
 import { idParamsSchema } from "../../common/schema.js";
+import { sendSuccess } from "../../utils/response.js";
+import {
+  createPostSchema,
+  getAllPostsQuerySchema,
+  updatePostSchema,
+} from "./post.schema.js";
+import PostService from "./post.service.js";
 
 export default class PostController {
   constructor(private readonly postService: PostService) {}
@@ -30,5 +34,17 @@ export default class PostController {
     const post = await this.postService.findById(id);
 
     sendSuccess(res, { message: `پست شماره ${id}`, data: post });
+  };
+
+  update = async (req: Request, res: Response) => {
+    const { id } = idParamsSchema.parse(req.params);
+    const payload = updatePostSchema.parse(req.body);
+
+    const updatedPost = await this.postService.update(id, payload);
+
+    sendSuccess(res, {
+      message: `پست شماره ${id} با موفقیت اپدیت شد`,
+      data: updatedPost,
+    });
   };
 }

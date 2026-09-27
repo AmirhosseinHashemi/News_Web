@@ -1,7 +1,11 @@
 import type { Post, Prisma } from "../../generated/prisma/client.js";
 import type { PrismaClient } from "../../generated/prisma/internal/class.js";
 import { execute } from "../../utils/queryExecuter.js";
-import { CreatePostData, FindAllPostsData } from "./post.type.js";
+import {
+  CreatePostData,
+  FindAllPostsData,
+  UpdatePostPayload,
+} from "./post.type.js";
 
 const POST_SEARCH_FIELDS = [
   "title",
@@ -91,6 +95,17 @@ export default class PostRepository {
             },
           },
         },
+      })
+    );
+  }
+
+  async update(id: number, data: UpdatePostPayload) {
+    return execute(() =>
+      this.prisma.post.update({
+        where: {
+          id,
+        },
+        data,
       })
     );
   }

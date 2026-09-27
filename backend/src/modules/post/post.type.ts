@@ -1,5 +1,9 @@
 import z from "zod";
-import { createPostSchema, getAllPostsQuerySchema } from "./post.schema.js";
+import {
+  createPostSchema,
+  getAllPostsQuerySchema,
+  updatePostSchema,
+} from "./post.schema.js";
 
 export type CreatePostPayload = z.infer<typeof createPostSchema>;
 
@@ -14,3 +18,5 @@ export type FindAllPostsData = Omit<FindAllPostQueries, "page" | "limit"> & {
   skip: number;
   take: number;
 };
+
+export type UpdatePostPayload = z.infer<typeof updatePostSchema>;
