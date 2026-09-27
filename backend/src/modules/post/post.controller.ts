@@ -13,9 +13,13 @@ export default class PostController {
 
   getAll = async (req: Request, res: Response) => {
     const queries = getAllPostsQuerySchema.parse(req.query);
-    const posts = await this.postService.findAll(queries);
+    const { posts, paginationMeta } = await this.postService.findAll(queries);
 
-    sendSuccess(res, { message: "لیست پست ها", data: posts });
+    sendSuccess(res, {
+      message: "لیست پست ها",
+      data: posts,
+      meta: paginationMeta,
+    });
   };
 
   createDraft = async (req: Request, res: Response) => {
