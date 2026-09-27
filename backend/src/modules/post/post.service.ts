@@ -1,3 +1,4 @@
+import BadRequestError from "../../errors/BadRequestError.js";
 import ConflictError from "../../errors/ConflictError.js";
 import NotFoundError from "../../errors/NotFoundError.js";
 import {
@@ -68,5 +69,17 @@ export default class PostService {
       throw new NotFoundError("پست پیدا نشد");
 
     return this.postRepository.update(id, payload);
+  }
+
+  async publish(id: number) {
+    const existingPost = await this.postRepository.findById(id);
+
+    if (!existingPost || existingPost.deletedAt)
+      throw new NotFoundError("پستی برای انتشار وجود ندارد");
+
+    if (existingPost.status === "PUBLISHED")
+      throw new BadRequestError("این پست قبلا منتشر شده");
+
+    return this.postRepository.publish(id);
   }
 }

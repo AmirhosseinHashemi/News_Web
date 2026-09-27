@@ -109,4 +109,18 @@ export default class PostRepository {
       })
     );
   }
+
+  async publish(id: number) {
+    return execute(() =>
+      this.prisma.post.update({
+        where: {
+          id,
+        },
+        data: {
+          status: "PUBLISHED",
+          publishedAt: new Date(),
+        },
+      })
+    );
+  }
 }

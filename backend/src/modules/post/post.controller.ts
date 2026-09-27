@@ -51,4 +51,11 @@ export default class PostController {
       data: updatedPost,
     });
   };
+
+  publish = async (req: Request, res: Response) => {
+    const { id } = idParamsSchema.parse(req.params);
+    const post = await this.postService.publish(id);
+
+    sendSuccess(res, { message: "پست با موفقیت منتشر شد", data: post });
+  };
 }

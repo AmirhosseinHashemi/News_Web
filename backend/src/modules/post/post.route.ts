@@ -44,5 +44,12 @@ adminPostRouter.patch(
   asyncHandler(postController.update)
 );
 
-export { adminPostRouter };
+adminPostRouter.patch(
+  "/:id/publish",
+  validateMiddleware({
+    params: idParamsSchema,
+  }),
+  asyncHandler(postController.publish)
+);
 
+export { adminPostRouter };
