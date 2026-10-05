@@ -16,6 +16,8 @@ export const createPostSchema = z.object({
 
   content: z.string().trim().min(1, "محتو را وارد کنید"),
 
+  coverId: z.number().int().positive().optional(),
+
   typeId: z.number().int().positive(),
 
   locationId: z.number().int().positive().optional(),

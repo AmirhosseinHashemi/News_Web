@@ -1,11 +1,13 @@
 import BadRequestError from "../../errors/BadRequestError.js";
 import ConflictError from "../../errors/ConflictError.js";
 import NotFoundError from "../../errors/NotFoundError.js";
+import { MediaType } from "../../generated/prisma/enums.js";
 import {
   getPagination,
   getPaginationMeta,
 } from "../../utils/paginationHelpers.js";
 import { generateSlug } from "../../utils/slug.js";
+import MediaRepository from "../media/media.repository.js";
 import type PostRepository from "./post.repository.js";
 import {
   CreatePostPayload,
@@ -14,7 +16,10 @@ import {
 } from "./post.type.js";
 
 export default class PostService {
-  constructor(private readonly postRepository: PostRepository) {}
+  constructor(
+    private readonly postRepository: PostRepository,
+    private readonly mediaRepository: MediaRepository
+  ) {}
 
   async findAll({
     page,
@@ -41,6 +46,15 @@ export default class PostService {
   }
 
   async createDraft(authorId: number, payload: CreatePostPayload) {
+    if (payload.coverId) {
+      const cover = await this.mediaRepository.findById(payload.coverId);
+
+      if (!cover) throw new NotFoundError("کاور پست یافت نشد");
+
+      if (cover.type !== MediaType.IMAGE)
+        throw new BadRequestError("کاور پست باید عکس باشد");
+    }
+
     const slug = generateSlug(payload.title);
 
     const existingPost = await this.postRepository.findBySlug(slug);

@@ -89,11 +89,7 @@ export default class PostRepository {
           category: true,
           location: true,
           type: true,
-          media: {
-            orderBy: {
-              sortOrder: "asc",
-            },
-          },
+          cover: true,
         },
       })
     );
