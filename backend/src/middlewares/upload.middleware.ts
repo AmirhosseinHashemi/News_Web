@@ -4,7 +4,13 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024; // 5MB
 
 const storage = multer.memoryStorage();
 
-const allowedMimeTypes = ["image/jpeg", "image/png", "image/webp"];
+const allowedMimeTypes = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "video/mp4",
+  "video/webm",
+];
 
 const upload = multer({
   storage: storage,
