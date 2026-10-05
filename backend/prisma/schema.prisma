@@ -137,6 +137,9 @@ model Post {
   excerpt         String?
   content         String
 
+  coverId         Int?         @unique
+  cover           Media?       @relation("PostCover", fields: [coverId], references: [id], onDelete: SetNull)
+
   typeId          Int
   locationId      Int?
 
@@ -157,8 +160,6 @@ model Post {
   category        Category     @relation(fields: [categoryId], references: [id])
   author          User         @relation(fields: [authorId], references: [id])
 
-  media           Media[]
-
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
 
@@ -171,23 +172,15 @@ model Post {
 
 model Media {
   id        Int       @id @default(autoincrement())
-
   type      MediaType
-  url       String
+  filename  String
+  path      String
+  mimeType  String
+  size      Int
 
-  caption   String?
-  altText   String?
-
-  sortOrder Int       @default(0)
-  isCover   Boolean   @default(false)
-
-  postId    Int
-
-  post      Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  coverFor  Post?    @relation("PostCover")
 
   createdAt DateTime  @default(now())
-
-  @@index([postId, sortOrder])
 
   @@map("media")
 }
