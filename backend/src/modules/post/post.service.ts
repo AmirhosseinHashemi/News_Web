@@ -77,6 +77,15 @@ export default class PostService {
   }
 
   async update(id: number, payload: UpdatePostPayload) {
+    if (payload.coverId) {
+      const cover = await this.mediaRepository.findById(payload.coverId);
+
+      if (!cover) throw new NotFoundError("کاور پست یافت نشد");
+
+      if (cover.type !== MediaType.IMAGE)
+        throw new BadRequestError("کاور باید عکس باشد");
+    }
+
     const existingPost = await this.postRepository.findById(id);
 
     if (!existingPost || existingPost.deletedAt)

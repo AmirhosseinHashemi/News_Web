@@ -63,6 +63,8 @@ export const updatePostSchema = z.object({
 
   content: z.string().trim().min(1, "محتوا اجباری میباشد").optional(),
 
+  coverId: z.coerce.number().int().positive().nullable().optional(),
+
   typeId: z.coerce.number().int().positive().optional(),
 
   locationId: z.coerce.number().int().positive().nullable().optional(),
