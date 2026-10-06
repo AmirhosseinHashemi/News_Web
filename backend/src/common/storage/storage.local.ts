@@ -17,3 +17,14 @@ export async function saveFile(buffer: Buffer, filename: string) {
     path: filePath,
   };
 }
+
+export async function deleteFile(filePath: string) {
+  try {
+    await fs.unlink(filePath);
+  } catch (error: unknown) {
+    if (error instanceof Error && "code" in error && error.code === "ENOENT") {
+      return;
+    }
+    throw error;
+  }
+}
