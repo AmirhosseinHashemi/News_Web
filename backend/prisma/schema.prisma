@@ -174,7 +174,6 @@ model Media {
   id        Int       @id @default(autoincrement())
   type      MediaType
   filename  String
-  path      String
   mimeType  String
   size      Int
 
