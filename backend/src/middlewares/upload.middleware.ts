@@ -12,7 +12,7 @@ const allowedMimeTypes = [
   "video/webm",
 ];
 
-const upload = multer({
+const uploadMiddleware = multer({
   storage: storage,
 
   limits: {
@@ -29,4 +29,4 @@ const upload = multer({
   },
 });
 
-export default upload;
+export default uploadMiddleware;
