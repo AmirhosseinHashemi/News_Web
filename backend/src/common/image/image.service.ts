@@ -1,3 +1,4 @@
+import crypto from "node:crypto";
 import sharp from "sharp";
 
 export async function processImage(buffer: Buffer) {
@@ -13,4 +14,8 @@ export async function processImage(buffer: Buffer) {
       quality: 85,
     })
     .toBuffer();
+}
+
+export function generateImageFilename() {
+  return `${crypto.randomUUID()}.webp`;
 }
