@@ -1,7 +1,8 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
-const uploadDir = path.join(process.cwd(), "uploads");
+const STORAGE_DIR_NAME = "uploads";
+const uploadDir = path.join(process.cwd(), STORAGE_DIR_NAME);
 
 export async function saveFile(buffer: Buffer, filename: string) {
   await fs.mkdir(uploadDir, {
@@ -27,4 +28,8 @@ export async function deleteFile(filePath: string) {
     }
     throw error;
   }
+}
+
+export function getFileStorageUrl(fileName: string) {
+  return `${STORAGE_DIR_NAME}/${fileName}`;
 }
