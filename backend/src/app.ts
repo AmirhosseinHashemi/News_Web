@@ -4,11 +4,14 @@ import express from "express";
 import helmet from "helmet";
 import path from "node:path";
 import errorMiddleware from "./middlewares/error.middleware.js";
+import requestLogger from "./middlewares/logger.middleware.js";
 import notFoundMiddleware from "./middlewares/notFound.middleware.js";
 import adminRouter from "./router/admin.js";
 import publicRouter from "./router/public.js";
 
 const app = express();
+
+app.use(requestLogger);
 
 app.use(helmet());
 
