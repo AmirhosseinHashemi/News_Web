@@ -137,7 +137,8 @@
   }
   body {
     @apply bg-background text-foreground antialiased;
-    line-height: 1.8; /* فارسی به ارتفاع خط بیشتری نیاز دارد */
+    line-height: 1.8;
+    overflow-x: hidden;
   }
   ::selection {
     background-color: color-mix(in oklab, var(--primary) 18%, transparent);
