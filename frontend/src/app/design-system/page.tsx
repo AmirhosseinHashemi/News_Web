@@ -27,6 +27,10 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
+import { EmptyState, ErrorState } from "@/components/shared/StateView";
+import { StatusPage } from "@/components/shared/StatusPage";
+import { ShieldAlert } from "lucide-react";
+
 import { CATEGORIES, type CategoryKey } from "@/config/categories";
 import { faDate, faDuration, faNumber } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -241,6 +245,7 @@ const NAV: [string, string][] = [
   ["#cards", "کارت خبر"],
   ["#forms", "فرم‌ها"],
   ["#misc", "اجزای دیگر"],
+  ["#states", "وضعیت‌ها"],
 ];
 
 /* ───────── اجزای کمکی همین صفحه ───────── */
@@ -622,12 +627,48 @@ export default function DesignSystemPage() {
               <SubLabel>Tooltip</SubLabel>
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger>
-                    <Button variant="outline">نشانه‌گذاری</Button>
-                  </TooltipTrigger>
+                  <TooltipTrigger
+                    render={<Button variant="outline">نشانه‌گذاری</Button>}
+                  />
                   <TooltipContent>افزودن به فهرست خواندنی</TooltipContent>
                 </Tooltip>
               </TooltipProvider>
+            </div>
+          </div>
+        </Section>
+
+        {/* ── وضعیت‌ها ── */}
+        <Section id="states" title="وضعیت‌ها">
+          <div className="grid gap-6 lg:grid-cols-2">
+            <div className="space-y-3">
+              <SubLabel>EmptyState</SubLabel>
+              <div className="rounded-xl border">
+                <EmptyState
+                  title="خالی"
+                  description="وقتی لیست یا نتیجه جستجو خالی است."
+                />
+              </div>
+            </div>
+            <div className="space-y-3">
+              <SubLabel>ErrorState</SubLabel>
+              <div className="rounded-xl border">
+                <ErrorState
+                  title="ارور"
+                  description="وقتی بارگذاری داده ناموفق است."
+                />
+              </div>
+            </div>
+            <div className="space-y-3 lg:col-span-2">
+              <SubLabel>StatusPage — embedded (۴۰۳)</SubLabel>
+              <StatusPage
+                embedded
+                code={403}
+                icon={ShieldAlert}
+                title="دسترسی غیرمجاز"
+                description="برای مشاهده این بخش باید با حساب مدیر وارد شوید."
+                homeHref="#"
+                homeLabel="بازگشت"
+              />
             </div>
           </div>
         </Section>
