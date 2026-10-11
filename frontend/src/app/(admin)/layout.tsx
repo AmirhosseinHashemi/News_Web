@@ -1,6 +1,6 @@
 import { AdminShell } from "@/components/admin/AdminShell";
 
-export default async function AdminLayout({
+export default async function Layout({
   children,
 }: {
   children: React.ReactNode;
