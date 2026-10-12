@@ -10,8 +10,8 @@ import {
 } from "@/components/news";
 
 import { ArticleCard, ArticleCardData } from "@/components/news/ArticleCard";
-import { SectionHeader } from "@/components/SectionHeader";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import { SectionHeader } from "@/components/shared/SectionHeader";
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";

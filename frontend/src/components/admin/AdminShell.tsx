@@ -2,7 +2,7 @@
 
 import { AdminNav } from "@/components/admin/AdminNav";
 import { UserMenu, type AdminUser } from "@/components/admin/UserMenu";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,

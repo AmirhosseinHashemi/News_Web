@@ -1,4 +1,4 @@
-import { ThemeProvider } from "@/components/ThemeProvider";
+import { ThemeProvider } from "@/components/shared/ThemeProvider";
 import { estedad } from "@/lib/fonts";
 import type { Metadata } from "next";
 import "./globals.css";
