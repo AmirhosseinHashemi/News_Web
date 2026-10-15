@@ -46,7 +46,7 @@ export default class AuthService {
     };
   }
 
-  async refresh(token: string | undefined) {
+  async refresh(token: string) {
     if (!token) throw new InvalidCredentialError("Invalid token");
 
     const storedToken = await this.refreshTokenService.findToken(token);
@@ -82,7 +82,7 @@ export default class AuthService {
     };
   }
 
-  async logout(token: string | undefined) {
+  async logout(token: string) {
     if (!token) throw new UnauthorizedError();
     await this.refreshTokenService.revokeRefreshToken(token);
   }

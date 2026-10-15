@@ -1,9 +1,6 @@
 import type { Request, Response } from "express";
-import {
-  clearRefreshTokenCookie,
-  setRefreshTokenCookie,
-} from "../../utils/cookie.js";
 import { sendSuccess } from "../../utils/response.js";
+import { logoutSchema, refreshSchema } from "./auth.schema.js";
 import AuthService from "./auth.service.js";
 import { loginPayload } from "./auth.types.js";
 
@@ -12,42 +9,35 @@ export default class AuthController {
 
   login = async (req: Request, res: Response) => {
     const userData = req.body as loginPayload;
-    const { accessToken, refreshToken, user } =
-      await this.authService.login(userData);
-
-    setRefreshTokenCookie(res, refreshToken);
+    const data = await this.authService.login(userData);
 
     sendSuccess(res, {
       message: "Login successfully",
-      data: { accessToken, user },
+      data,
     });
   };
 
   refresh = async (req: Request, res: Response) => {
-    const refreshToken = req.cookies.refreshToken as string | undefined;
+    const payload = refreshSchema.parse(req.body);
 
-    const { accessToken, refreshToken: newRefreshToken } =
-      await this.authService.refresh(refreshToken);
+    const data = await this.authService.refresh(payload.refreshToken);
 
-    setRefreshTokenCookie(res, newRefreshToken);
     sendSuccess(res, {
       message: "New token generated successfully",
-      data: accessToken,
+      data,
     });
   };
 
   logout = async (req: Request, res: Response) => {
-    const refreshToken = req.cookies.refreshToken as string | undefined;
-    await this.authService.logout(refreshToken);
+    const payload = logoutSchema.parse(req.body);
+    await this.authService.logout(payload.refreshToken);
 
-    clearRefreshTokenCookie(res);
     sendSuccess(res, { message: "logout successfully" });
   };
 
   logoutAll = async (req: Request, res: Response) => {
     await this.authService.logoutAll(req.user.id);
 
-    clearRefreshTokenCookie(res);
     sendSuccess(res, { message: "logout all successfully" });
   };
 }
