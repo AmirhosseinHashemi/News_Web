@@ -19,7 +19,7 @@ export default class AuthService {
   async login({ password, phone }: loginPayload) {
     const user = await this.userRepository.findByPhone(phone);
     if (!user) throw new InvalidCredentialError();
-    if (user.isActive === false) throw new ForbiddenError("User is not active");
+    if (user.isActive === false) throw new ForbiddenError("کاربر فعال نیست");
 
     const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
     if (!isPasswordValid) throw new InvalidCredentialError();
@@ -47,23 +47,22 @@ export default class AuthService {
   }
 
   async refresh(token: string) {
-    if (!token) throw new InvalidCredentialError("Invalid token");
+    if (!token) throw new InvalidCredentialError("توکن نامعتبر");
 
     const storedToken = await this.refreshTokenService.findToken(token);
 
-    if (!storedToken) throw new InvalidCredentialError("Invalid token");
+    if (!storedToken) throw new InvalidCredentialError("توکن نامعتبر");
 
-    if (storedToken.revokedAt)
-      throw new InvalidCredentialError("Invalid token");
+    if (storedToken.revokedAt) throw new InvalidCredentialError("توکن نامعتبر");
 
     if (storedToken.expiresAt < new Date())
-      throw new InvalidCredentialError("Invalid token");
+      throw new InvalidCredentialError("توکن نامعتبر");
 
     const user = await this.userRepository.findById(storedToken.userId);
 
-    if (!user) throw new NotFoundError("User not found");
+    if (!user) throw new NotFoundError("کاربری یافت نشد");
 
-    if (user.isActive === false) throw new ForbiddenError("User is not active");
+    if (user.isActive === false) throw new ForbiddenError("کاربر فعال نیست");
 
     const { token: newRefreshToken } =
       await this.refreshTokenService.rotateRefreshToken(
