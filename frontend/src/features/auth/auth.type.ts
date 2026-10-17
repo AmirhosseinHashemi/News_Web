@@ -20,3 +20,10 @@ export type LoginResponse = {
   refreshToken: string;
   user: User;
 };
+
+export type MeResponse = User & {
+  roleId: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
