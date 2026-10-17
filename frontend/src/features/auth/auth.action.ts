@@ -1,5 +1,6 @@
 "use server";
 
+import { ROUTES } from "@/config/routes";
 import { postLoginReq } from "@/features/auth/auth.api";
 import { LoginFormValues } from "@/features/auth/auth.schema";
 import { ApiError } from "@/lib/error";
@@ -42,5 +43,5 @@ export async function loginAction(
     };
   }
 
-  redirect("/admin");
+  redirect(ROUTES["admin"]);
 }
