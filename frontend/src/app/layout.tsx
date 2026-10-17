@@ -1,4 +1,5 @@
 import { ThemeProvider } from "@/components/shared/ThemeProvider";
+import { Toaster } from "@/components/ui/toast";
 import { estedad } from "@/lib/fonts";
 import type { Metadata } from "next";
 import "./globals.css";
@@ -22,6 +23,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <Toaster />
           {children}
         </ThemeProvider>
       </body>
