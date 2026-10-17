@@ -40,4 +40,10 @@ export default class AuthController {
 
     sendSuccess(res, { message: "logout all successfully" });
   };
+
+  me = async (req: Request, res: Response) => {
+    const user = await this.authService.me(req.user.id);
+
+    sendSuccess(res, { message: "کاربر با موفقیت پیدا شد", data: user });
+  };
 }

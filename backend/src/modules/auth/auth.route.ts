@@ -32,4 +32,6 @@ authRouter.post(
   asyncHandler(authController.logoutAll)
 );
 
+authRouter.get("/me", authenticateMiddleware, asyncHandler(authController.me));
+
 export default authRouter;

@@ -90,4 +90,10 @@ export default class AuthService {
   async logoutAll(userId: number) {
     await this.refreshTokenRepository.revokeAllUserToken(userId);
   }
+
+  async me(userId: number) {
+    const user = await this.userRepository.findById(userId);
+    if (!user) throw new NotFoundError(`کاربر با شناسه ${userId} یافت نشد`);
+    return user;
+  }
 }
