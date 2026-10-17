@@ -1,7 +1,7 @@
 import AppError from "./AppError.js";
 
 export default class ForbiddenError extends AppError {
-  constructor(message = "Forbidden") {
+  constructor(message = "ممنوع") {
     super({
       message,
       statusCode: 403,

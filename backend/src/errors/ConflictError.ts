@@ -3,7 +3,7 @@ import { ConfilictErrorOption } from "./error.types.js";
 
 export default class ConflictError extends AppError {
   constructor({
-    message = "Resource already exists",
+    message = "منبع از قبل وجود دارد",
     errors = [],
   }: ConfilictErrorOption) {
     super({

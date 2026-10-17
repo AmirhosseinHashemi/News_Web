@@ -3,7 +3,7 @@ import { ValidationErrorOptions } from "./error.types.js";
 
 export default class ValidationError extends AppError {
   constructor({
-    message = "Validation failed",
+    message = "خطا در اعتبار سنجی",
     errors = [],
   }: ValidationErrorOptions) {
     super({ message, errors, statusCode: 422 });

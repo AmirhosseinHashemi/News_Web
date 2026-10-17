@@ -6,7 +6,7 @@ export default class AppError extends Error {
   public readonly isOperational: boolean;
 
   constructor({
-    message = "Something went wrong",
+    message = "مشکلی در اجرای برنامه پیش امده",
     statusCode = 500,
     errors = [],
     isOperational = true,

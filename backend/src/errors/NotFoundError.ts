@@ -1,7 +1,7 @@
 import AppError from "./AppError.js";
 
 export default class NotFoundError extends AppError {
-  constructor(message = "Resource not found") {
+  constructor(message = "منبع یافت نشد") {
     super({
       message,
       statusCode: 404,

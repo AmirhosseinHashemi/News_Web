@@ -1,7 +1,7 @@
 import AppError from "./AppError.js";
 
 export default class UnauthorizedError extends AppError {
-  constructor(message = "Unauthorized") {
+  constructor(message = "عدم احرازهویت") {
     super({
       message,
       statusCode: 401,
