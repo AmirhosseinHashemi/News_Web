@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { toast } from "@/components/ui/toast";
 import { loginAction } from "@/features/auth/auth.action";
 import { loginSchema, type LoginFormValues } from "@/features/auth/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,7 +26,11 @@ export function LoginForm() {
   });
 
   async function onSubmit(values: LoginFormValues) {
-    await loginAction(values);
+    const res = await loginAction(values);
+    toast.add({
+      type: "error",
+      description: res.message,
+    });
   }
 
   return (

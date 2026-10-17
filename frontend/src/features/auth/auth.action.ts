@@ -10,36 +10,42 @@ import { redirect } from "next/navigation";
 
 export async function loginAction(
   formData: LoginFormValues,
-): Promise<ApiFailure | void> {
+): Promise<ApiFailure> {
   try {
     const response = await postLoginReq(formData);
-    const { accessToken, refreshToken } = response.data;
 
-    const cookieStore = await cookies();
+    if (response.success) {
+      const { accessToken, refreshToken } = response.data;
 
-    cookieStore.set("accessToken", accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      path: "/",
-    });
+      const cookieStore = await cookies();
 
-    cookieStore.set("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      path: "/",
-    });
-  } catch (err) {
-    if (err instanceof ApiError) {
+      cookieStore.set("accessToken", accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        path: "/",
+      });
+
+      cookieStore.set("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        path: "/",
+      });
+    }
+
+    if (!response.success) {
+      const err = new ApiError(response);
       return err.response;
     }
+  } catch (err) {
     return {
+      status: 500,
       success: false,
       message: "خطای ناشناخته ای رخ داده",
       errorName: "UnknownError",
       errors: [],
-      timestamp: new Date().toLocaleDateString(),
+      timestamp: new Date().toISOString(),
     };
   }
 
