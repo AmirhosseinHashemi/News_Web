@@ -1,30 +1,32 @@
 import { API_BASE_URL } from "@/config/constants";
-import { ApiError } from "@/lib/error";
-import { ApiFailure, ApiSuccess, HttpOptions } from "@/types/api.type";
+import { ApiResponse, HttpOptions } from "@/types/api.type";
+import { cookies } from "next/headers";
 
 export async function http<T>(
   path: string,
   options: HttpOptions = {},
-): Promise<ApiSuccess<T>> {
-  const { body, headers, ...rest } = options;
+): Promise<ApiResponse<T>> {
+  const { body, ...rest } = options;
+
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("accessToken")?.value;
+
+  const headers = new Headers(options.headers);
+  headers.set("Content-Type", "application/json");
+
+  if (accessToken) {
+    headers.set("Authorization", `Bearer ${accessToken}`);
+  }
 
   const response = await fetch(`${API_BASE_URL}${path}`, {
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      ...headers,
-    },
-    body: body ? JSON.stringify(body) : undefined,
     ...rest,
+    credentials: "include",
+    headers,
+    body: body ? JSON.stringify(body) : undefined,
   });
 
-  const data: unknown = await response.json();
+  const data: ApiResponse<T> = await response.json();
+  data.status = response.status
 
-  if (!response.ok) {
-    if (typeof data === "object" && data !== null && "success" in data) {
-      throw new ApiError(response.status, data as ApiFailure);
-    }
-    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-  }
-  return data as ApiSuccess<T>;
+  return data;
 }

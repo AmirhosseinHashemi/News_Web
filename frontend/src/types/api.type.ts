@@ -23,6 +23,7 @@ export type ApiError = {
 };
 
 export type ApiSuccess<T> = {
+  status: number;
   success: true;
   message: string;
   data: T;
@@ -31,6 +32,7 @@ export type ApiSuccess<T> = {
 };
 
 export type ApiFailure = {
+  status: number;
   success: false;
   message: string;
   errorName: ErrorName;
