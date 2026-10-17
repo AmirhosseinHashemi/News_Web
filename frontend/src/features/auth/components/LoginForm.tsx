@@ -1,13 +1,13 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { loginAction } from "@/features/auth/auth.action";
+import { loginSchema, type LoginFormValues } from "@/features/auth/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, LockKeyhole, Smartphone } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { loginSchema, type LoginFormValues } from "@/features/auth/auth.schema";
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -25,16 +25,11 @@ export function LoginForm() {
   });
 
   async function onSubmit(values: LoginFormValues) {
-    // TODO: درخواست ورود به API سمت سرور
-    // remember را نیز هنگام پیاده‌سازی نشست ارسال کنید.
-    console.info("Validated login form", {
-      phone: values.phone,
-    });
+    await loginAction(values);
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
-      {/* شماره همراه */}
       <div className="space-y-2">
         <label htmlFor="phone" className="text-sm font-medium">
           شماره همراه
@@ -67,7 +62,6 @@ export function LoginForm() {
         )}
       </div>
 
-      {/* رمز عبور */}
       <div className="space-y-2">
         <label htmlFor="password" className="text-sm font-medium">
           رمز عبور
