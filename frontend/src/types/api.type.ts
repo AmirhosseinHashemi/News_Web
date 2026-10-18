@@ -15,7 +15,8 @@ export type ErrorName =
   | "ForbiddenError"
   | "ConflictError"
   | "BadRequestError"
-  | "UnknownError";
+  | "UnknownError"
+  | "NetworkError";
 
 export type ApiError = {
   field: string;
