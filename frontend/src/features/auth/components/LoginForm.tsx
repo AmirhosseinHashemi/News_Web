@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/toast";
 import { loginAction } from "@/features/auth/auth.action";
 import { loginSchema, type LoginFormValues } from "@/features/auth/auth.schema";
+import { getErrorNameLabel } from "@/lib/error";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, LockKeyhole, Smartphone } from "lucide-react";
 import { useState } from "react";
@@ -29,6 +30,7 @@ export function LoginForm() {
     const res = await loginAction(values);
     toast.add({
       type: "error",
+      title: getErrorNameLabel(res.errorName),
       description: res.message,
     });
   }

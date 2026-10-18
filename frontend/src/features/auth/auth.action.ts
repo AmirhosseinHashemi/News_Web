@@ -3,7 +3,7 @@
 import { ROUTES } from "@/config/routes";
 import { postLoginReq } from "@/features/auth/auth.api";
 import { LoginFormValues } from "@/features/auth/auth.schema";
-import { ApiError } from "@/lib/error";
+import { ApiError, NETWORK_ERR_MSG } from "@/lib/error";
 import { ApiFailure } from "@/types/api.type";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -42,8 +42,8 @@ export async function loginAction(
     return {
       status: 500,
       success: false,
-      message: "خطای ناشناخته ای رخ داده",
-      errorName: "UnknownError",
+      message: NETWORK_ERR_MSG,
+      errorName: "NetworkError",
       errors: [],
       timestamp: new Date().toISOString(),
     };
