@@ -1,4 +1,5 @@
-import { API_BASE_URL } from "@/config/constants";
+import { API_BASE_URL, AR_SESSION } from "@/config/constants";
+import { decryptSession } from "@/lib/jose";
 import { ApiResponse, HttpOptions } from "@/types/api.type";
 import { cookies } from "next/headers";
 
@@ -9,13 +10,14 @@ export async function http<T>(
   const { body, ...rest } = options;
 
   const cookieStore = await cookies();
-  const accessToken = cookieStore.get("accessToken")?.value;
+  const sessionStr = cookieStore.get(AR_SESSION)?.value;
 
   const headers = new Headers(options.headers);
   headers.set("Content-Type", "application/json");
 
-  if (accessToken) {
-    headers.set("Authorization", `Bearer ${accessToken}`);
+  if (sessionStr) {
+    const userSession = await decryptSession(sessionStr)
+    headers.set("Authorization", `Bearer ${userSession.accessToken}`);
   }
 
   const response = await fetch(`${API_BASE_URL}${path}`, {
