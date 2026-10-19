@@ -10,9 +10,13 @@ export async function encryptSession(session: UserSession): Promise<string> {
 }
 
 export async function decryptSession(session: string): Promise<UserSession> {
-  const { payload } = await jwtVerify(session, encodedKey, {
-    algorithms: ["HS256"],
-  });
+  try {
+    const { payload } = await jwtVerify(session, encodedKey, {
+      algorithms: ["HS256"],
+    });
 
-  return payload as UserSession;
+    return payload as UserSession;
+  } catch (error) {
+    throw new Error("خطا در اعتبارسنجی سشن کابر");
+  }
 }
