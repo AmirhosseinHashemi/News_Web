@@ -26,8 +26,11 @@ export default class AuthService {
 
     const accessToken = generateAccessToken({
       userId: user.id,
+      userName: user.name,
       roleId: user.roleId,
       role: user.role.name,
+      roleDescription: user.role.description || "",
+      phone: user.phone,
     });
     const { token: refreshToken } = await this.refreshTokenService.create(
       user.id
@@ -71,8 +74,11 @@ export default class AuthService {
       );
     const accessToken = generateAccessToken({
       userId: user.id,
+      userName: user.name,
       roleId: user.roleId,
       role: user.role.name,
+      roleDescription: user.role.description || "",
+      phone: user.phone,
     });
 
     return {

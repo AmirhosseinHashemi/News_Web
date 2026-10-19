@@ -4,8 +4,11 @@ import UnauthorizedError from "../errors/UnauthorizedError.js";
 
 type AccessTokenPayload = {
   userId: number;
+  userName: string;
   roleId: number;
   role: string;
+  roleDescription: string;
+  phone: string;
 };
 
 export function generateAccessToken(payload: AccessTokenPayload) {
