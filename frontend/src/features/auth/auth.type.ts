@@ -27,3 +27,18 @@ export type MeResponse = User & {
   createdAt: string;
   updatedAt: string;
 };
+
+export type JwtPayload = {
+  userId: number;
+  userName: string;
+  roleId: number;
+  role: string;
+  roleDescription: string;
+  phone: string;
+  exp: number;
+};
+
+export type UserSession = JwtPayload & {
+  accessToken: string;
+  refreshToken: string;
+};
