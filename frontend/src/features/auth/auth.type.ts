@@ -42,3 +42,5 @@ export type UserSession = JwtPayload & {
   accessToken: string;
   refreshToken: string;
 };
+
+export type SafeSession = Omit<UserSession, "refreshToken">;

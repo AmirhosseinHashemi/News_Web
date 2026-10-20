@@ -44,3 +44,9 @@ export type ApiFailure = {
 export type ApiResponse<T> = ApiSuccess<T> | ApiFailure;
 
 export type HttpOptions = Omit<RequestInit, "body"> & { body?: unknown };
+
+export type RoutHandlerResponse<T> = {
+  success: boolean;
+  data: T | null;
+  message: string;
+};
