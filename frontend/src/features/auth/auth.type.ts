@@ -18,6 +18,7 @@ export type Role = {
 export type LoginResponse = {
   accessToken: string;
   refreshToken: string;
+  refreshTokenExp: Date;
   user: User;
 };
 
@@ -41,6 +42,17 @@ export type JwtPayload = {
 export type UserSession = JwtPayload & {
   accessToken: string;
   refreshToken: string;
+  refreshTokenExp: number;
 };
 
 export type SafeSession = Omit<UserSession, "refreshToken">;
+
+export type RefreshResponse = {
+  accessToken: string;
+  refreshToken: string;
+  refreshTokenExp: Date;
+};
+
+export type SetAuthActionData = Omit<RefreshResponse, "refreshTokenExp"> & {
+  refreshTokenExp: Date | number;
+};
