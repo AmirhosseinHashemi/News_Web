@@ -32,13 +32,13 @@ export default class AuthService {
       roleDescription: user.role.description || "",
       phone: user.phone,
     });
-    const { token: refreshToken } = await this.refreshTokenService.create(
-      user.id
-    );
+    const { token: refreshToken, expiresAt } =
+      await this.refreshTokenService.create(user.id);
 
     return {
-      refreshToken,
       accessToken,
+      refreshToken,
+      refreshTokenExp: expiresAt,
       user: {
         id: user.id,
         name: user.name,
@@ -67,7 +67,7 @@ export default class AuthService {
 
     if (user.isActive === false) throw new ForbiddenError("کاربر فعال نیست");
 
-    const { token: newRefreshToken } =
+    const { token: newRefreshToken, expiresAt } =
       await this.refreshTokenService.rotateRefreshToken(
         storedToken.id,
         user.id
@@ -84,6 +84,7 @@ export default class AuthService {
     return {
       accessToken,
       refreshToken: newRefreshToken,
+      refreshTokenExp: expiresAt,
     };
   }
 
