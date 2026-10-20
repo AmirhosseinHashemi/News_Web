@@ -12,13 +12,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useSessionStore } from "@/features/auth/auth.store";
+import { Skeleton } from "@/components/ui/skeleton";
 
-export interface AdminUser {
-  name?: string;
-  role?: string;
-}
+export function UserMenu() {
+  const session = useSessionStore((state) => state.session);
+  const status = useSessionStore((state) => state.status);
 
-export function UserMenu({ user }: { user: AdminUser }) {
+  if (status === "loading") return <Skeleton className="w-36 h-8" />;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -26,11 +28,11 @@ export function UserMenu({ user }: { user: AdminUser }) {
           <Button variant="ghost" className="h-auto gap-2 px-2 py-1.5">
             <Avatar className="size-8">
               <AvatarFallback className="text-xs">
-                {user.name?.charAt(0) ?? "؟"}
+                {session?.userName?.charAt(0) ?? "-"}
               </AvatarFallback>
             </Avatar>
             <span className="hidden text-sm md:inline">
-              {user.name ?? "کاربر"}
+              {session?.userName ?? "کاربر"}
             </span>
           </Button>
         }
@@ -40,9 +42,9 @@ export function UserMenu({ user }: { user: AdminUser }) {
           <DropdownMenuLabel className="flex items-center gap-2">
             <UserRound className="size-4 text-muted-foreground" />
             <span className="flex flex-col">
-              <span className="text-sm">{user.name}</span>
+              <span className="text-sm">{session?.userName}</span>
               <span className="text-xs font-normal text-muted-foreground">
-                {user.role ? "نقش کاربر " : "—"}
+                {session?.roleDescription ?? "-"}
               </span>
             </span>
           </DropdownMenuLabel>
