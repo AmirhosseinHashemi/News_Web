@@ -39,9 +39,10 @@ export type JwtPayload = {
   exp: number;
 };
 
-export type UserSession = JwtPayload & {
+export type UserSession = {
   accessToken: string;
   refreshToken: string;
+  accessTokenExp: number;
   refreshTokenExp: number;
 };
 
