@@ -12,7 +12,7 @@ export default class AuthController {
     const data = await this.authService.login(userData);
 
     sendSuccess(res, {
-      message: "Login successfully",
+      message: "اعتبار سنجی با موفقیت انجام شد",
       data,
     });
   };
