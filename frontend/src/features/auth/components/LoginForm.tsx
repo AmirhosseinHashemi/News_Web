@@ -3,15 +3,18 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/toast";
+import { ROUTES } from "@/config/routes";
 import { loginAction } from "@/features/auth/auth.action";
 import { loginSchema, type LoginFormValues } from "@/features/auth/auth.schema";
 import { getErrorNameLabel } from "@/lib/error";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, LockKeyhole, Smartphone } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 export function LoginForm() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
 
   const {
@@ -28,11 +31,22 @@ export function LoginForm() {
 
   async function onSubmit(values: LoginFormValues) {
     const res = await loginAction(values);
-    toast.add({
-      type: "error",
-      title: getErrorNameLabel(res.errorName),
-      description: res.message,
-    });
+
+    if (!res.success) {
+      toast.add({
+        type: "error",
+        title: getErrorNameLabel(res.errorName),
+        description: res.message,
+      });
+    }
+
+    if (res.success) {
+      toast.add({
+        type: "success",
+        description: res.message,
+      });
+      router.replace(ROUTES["admin"]);
+    }
   }
 
   return (
