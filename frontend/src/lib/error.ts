@@ -18,9 +18,15 @@ export function getErrorNameLabel(name: ErrorName): string {
   return ERROR_NAME_LABELS[name] ?? ERROR_NAME_LABELS.UnknownError;
 }
 
-export class ApiError extends Error {
-  constructor(public readonly response: ApiFailure) {
-    super(response.message);
-    this.name = "ApiError";
-  }
-}
+export const failure = (
+  status: number,
+  errorName: ApiFailure["errorName"],
+  message: string,
+): ApiFailure => ({
+  status,
+  success: false,
+  message,
+  errorName,
+  errors: [],
+  timestamp: new Date().toISOString(),
+});
