@@ -1,7 +1,7 @@
 import { AR_SESSION } from "@/config/constants";
 import {
-  SetAuthActionData,
   JwtPayload,
+  SetAuthActionData,
   UserSession,
 } from "@/features/auth/auth.type";
 import { encryptSession } from "@/lib/jose";
