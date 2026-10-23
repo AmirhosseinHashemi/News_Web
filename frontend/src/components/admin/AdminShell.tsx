@@ -1,7 +1,5 @@
-"use client";
-
 import { AdminNav } from "@/components/admin/AdminNav";
-import { UserMenu, type AdminUser } from "@/components/admin/UserMenu";
+import { UserMenu, UserMenuSkeleton } from "@/components/admin/UserMenu";
 import { ThemeToggle } from "@/components/shared/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,15 +12,9 @@ import {
 } from "@/components/ui/sheet";
 import { PROJECT_BUSUINESS_NAME } from "@/config/constants";
 import { Menu, XIcon } from "lucide-react";
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 
-export function AdminShell({
-  user,
-  children,
-}: {
-  user: AdminUser;
-  children: ReactNode;
-}) {
+export function AdminShell({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-svh bg-muted/30">
       <aside className="sticky top-0 hidden h-svh w-60 shrink-0 flex-col border-e bg-card lg:flex">
@@ -65,7 +57,9 @@ export function AdminShell({
           </Sheet>
           <div className="flex items-center ms-auto">
             <ThemeToggle />
-            <UserMenu user={user} />
+            <Suspense fallback={<UserMenuSkeleton />}>
+              <UserMenu />
+            </Suspense>
           </div>
         </header>
 
@@ -73,7 +67,9 @@ export function AdminShell({
         <header className="sticky top-0 z-40 hidden h-14 items-center border-b bg-background/90 px-6 backdrop-blur lg:flex">
           <div className="ms-auto flex items-center gap-1">
             <ThemeToggle />
-            <UserMenu user={user} />
+            <Suspense fallback={<UserMenuSkeleton />}>
+              <UserMenu />
+            </Suspense>
           </div>
         </header>
 
