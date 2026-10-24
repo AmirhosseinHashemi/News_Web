@@ -26,7 +26,7 @@ export default class AuthService {
 
     const accessToken = generateAccessToken({
       userId: user.id,
-      userName: user.name,
+      userName: user.firstName,
       roleId: user.roleId,
       role: user.role.name,
       roleDescription: user.role.description || "",
@@ -41,7 +41,8 @@ export default class AuthService {
       refreshTokenExp: expiresAt,
       user: {
         id: user.id,
-        name: user.name,
+        firstName: user.firstName,
+        lastName: user.lastName,
         email: user.email,
         phone: user.phone,
         role: user.role,
@@ -74,7 +75,7 @@ export default class AuthService {
       );
     const accessToken = generateAccessToken({
       userId: user.id,
-      userName: user.name,
+      userName: user.firstName,
       roleId: user.roleId,
       role: user.role.name,
       roleDescription: user.role.description || "",
