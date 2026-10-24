@@ -7,6 +7,7 @@ import {
   getPagination,
   getPaginationMeta,
 } from "../../utils/paginationHelpers.js";
+import { USER_MSG } from "./user.constant.js";
 import UserRepository from "./user.repository.js";
 import {
   CreateUserPayload,
@@ -35,7 +36,7 @@ export default class UserService {
   async findById(id: number) {
     const user = await this.userRepository.findById(id);
 
-    if (!user) throw new NotFoundError("User not found");
+    if (!user) throw new NotFoundError(USER_MSG["notFound"]);
 
     return user;
   }
@@ -45,7 +46,7 @@ export default class UserService {
 
     if (isExistUser)
       throw new ConflictError({
-        message: "User with this phone number already exist",
+        message: USER_MSG["confilictPhone"],
       });
 
     const passwordHash = await hashPassword(payload.password);
@@ -63,7 +64,9 @@ export default class UserService {
     if (data.phone !== undefined) {
       const user = await this.userRepository.findByPhone(data.phone);
       if (user && user.id !== userId)
-        throw new ConflictError({ message: "Phone number is already in use" });
+        throw new ConflictError({
+          message: USER_MSG["confilictPhone"],
+        });
     }
 
     const { password, ...dataWithoutPassword } = data;
@@ -87,7 +90,7 @@ export default class UserService {
 
     const user = await this.userRepository.findById(userToUpdateId);
 
-    if (!user) throw new NotFoundError("User not found");
+    if (!user) throw new NotFoundError(USER_MSG["notFound"]);
 
     if (payload.isActive === true)
       return await this.userRepository.activateUser(userToUpdateId);

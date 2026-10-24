@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import { sendSuccess } from "../../utils/response.js";
+import { USER_MSG } from "./user.constant.js";
 import UserService from "./user.service.js";
 import {
   createUserSchema,
@@ -22,7 +23,7 @@ export default class UserController {
     });
 
     sendSuccess(res, {
-      message: "All users",
+      message: USER_MSG["AllUser"],
       data: users,
       meta: paginationMeta,
     });
@@ -32,7 +33,7 @@ export default class UserController {
     const { id } = getUserByIdParamsSchema.parse(req.params);
     const user = await this.userService.findById(id);
 
-    sendSuccess(res, { message: `User ${id}`, data: user });
+    sendSuccess(res, { message: `${USER_MSG["user"]} ${id}`, data: user });
   };
 
   create = async (req: Request, res: Response) => {
@@ -41,7 +42,7 @@ export default class UserController {
     const newUser = await this.userService.create(payload);
 
     sendSuccess(res, {
-      message: "New user created successfully",
+      message: USER_MSG["createSuccess"],
       data: newUser,
     });
   };
@@ -53,7 +54,7 @@ export default class UserController {
     const updatedUser = await this.userService.update(id, payload);
 
     sendSuccess(res, {
-      message: "User updated successfully",
+      message: USER_MSG["updateSuccess"],
       data: updatedUser,
     });
   };
@@ -71,7 +72,7 @@ export default class UserController {
     );
 
     sendSuccess(res, {
-      message: "User status changed successfully",
+      message: USER_MSG["updateStatusSuccess"],
       data: updatedUser,
     });
   };
