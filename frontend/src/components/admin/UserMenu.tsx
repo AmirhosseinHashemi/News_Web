@@ -1,3 +1,4 @@
+import { LogoutForm } from "@/components/admin/LogoutForm";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getMeReq } from "@/features/auth/auth.api";
-import { LogOut, UserRound } from "lucide-react";
+import { UserRound } from "lucide-react";
 
 export async function UserMenu() {
   const res = await getMeReq();
@@ -28,10 +29,10 @@ export async function UserMenu() {
           <Button variant="ghost" className="h-auto gap-2 px-2 py-1.5">
             <Avatar className="size-8">
               <AvatarFallback className="text-xs">
-                {user.name.charAt(0) ?? "-"}
+                {user.firstName.charAt(0) ?? "-"}
               </AvatarFallback>
             </Avatar>
-            <span className="hidden text-sm md:inline">{user.name ?? "-"}</span>
+            <span className="hidden text-sm md:inline">{user.firstName ?? "-"}</span>
           </Button>
         }
       ></DropdownMenuTrigger>
@@ -40,23 +41,15 @@ export async function UserMenu() {
           <DropdownMenuLabel className="flex items-center gap-2">
             <UserRound className="size-4 text-muted-foreground" />
             <span className="flex flex-col">
-              <span className="text-sm">{user?.name}</span>
+              <span className="text-sm">{`${user?.firstName} ${user?.lastName}`}</span>
               <span className="text-xs font-normal text-muted-foreground">
                 {user.role.description ?? "-"}
               </span>
             </span>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <form className="w-full">
-              <button
-                type="submit"
-                className="flex w-full items-center gap-2 text-destructive"
-              >
-                <LogOut className="size-4" />
-                خروج از حساب
-              </button>
-            </form>
+          <DropdownMenuItem closeOnClick={false}>
+            <LogoutForm />
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
