@@ -13,7 +13,8 @@ export const getUserByIdParamsSchema = z.object({
 });
 
 export const createUserSchema = z.object({
-  name: z.string().trim().min(MIN_LENGTH_NAME),
+  firstName: z.string().trim().min(MIN_LENGTH_NAME),
+  lastName: z.string().trim().min(MIN_LENGTH_NAME),
   email: z.email(),
   phone: z.string().trim().min(MIN_LENGTH_PHONE),
   password: z.string().min(MIN_LENGTH_PASSWORD),
@@ -22,7 +23,8 @@ export const createUserSchema = z.object({
 });
 
 export const updateUserBodySchema = z.object({
-  name: z.string().trim().min(MIN_LENGTH_NAME).optional(),
+  firstName: z.string().trim().min(MIN_LENGTH_NAME).optional(),
+  lastName: z.string().trim().min(MIN_LENGTH_NAME).optional(),
   email: z.email().optional(),
   phone: z.string().trim().min(MIN_LENGTH_PHONE).optional(),
   password: z.string().min(MIN_LENGTH_PASSWORD).optional(),

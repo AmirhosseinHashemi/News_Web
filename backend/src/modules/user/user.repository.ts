@@ -44,7 +44,8 @@ export default class UserRepository {
   }
 
   async create({
-    name,
+    firstName,
+    lastName,
     email,
     phone,
     password,
@@ -54,7 +55,8 @@ export default class UserRepository {
     return execute(() =>
       this.prisma.user.create({
         data: {
-          name,
+          firstName,
+          lastName,
           email,
           phone,
           isActive,
