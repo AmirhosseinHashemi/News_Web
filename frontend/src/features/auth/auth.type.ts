@@ -16,20 +16,6 @@ export type Role = {
   updatedAt: string;
 };
 
-export type LoginResponse = {
-  accessToken: string;
-  refreshToken: string;
-  refreshTokenExp: Date;
-  user: User;
-};
-
-export type MeResponse = User & {
-  roleId: number;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-};
-
 export type JwtPayload = {
   userId: number;
   userName: string;
@@ -49,12 +35,27 @@ export type UserSession = {
 
 export type SafeSession = Omit<UserSession, "refreshToken">;
 
+export type SetAuthActionData = Omit<RefreshResponse, "refreshTokenExp"> & {
+  refreshTokenExp: Date | number;
+};
+
+// api responses
 export type RefreshResponse = {
   accessToken: string;
   refreshToken: string;
   refreshTokenExp: Date;
 };
 
-export type SetAuthActionData = Omit<RefreshResponse, "refreshTokenExp"> & {
-  refreshTokenExp: Date | number;
+export type LoginResponse = {
+  accessToken: string;
+  refreshToken: string;
+  refreshTokenExp: Date;
+  user: User;
+};
+
+export type MeResponse = User & {
+  roleId: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
 };
