@@ -35,7 +35,7 @@ export default class CategoryRepository {
           skip,
           take,
         }),
-        this.prisma.category.count(),
+        this.prisma.category.count({ where }),
       ])
     );
   }
