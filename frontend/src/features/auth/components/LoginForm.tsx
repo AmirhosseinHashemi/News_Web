@@ -1,142 +1,108 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/toast";
-import { ROUTES } from "@/config/routes";
-import { loginAction } from "@/features/auth/auth.action";
-import { loginSchema, type LoginFormValues } from "@/features/auth/auth.schema";
-import { getErrorNameLabel } from "@/lib/error";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, LockKeyhole, Smartphone } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller } from "react-hook-form";
+
+import { Button } from "@/components/ui/button";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { useLoginForm } from "@/features/auth/hooks/useLoginForm";
+import Link from "next/link";
 
 export function LoginForm() {
-  const router = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
-
   const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<LoginFormValues>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: {
-      phone: "",
-      password: "",
-    },
-  });
-
-  async function onSubmit(values: LoginFormValues) {
-    const res = await loginAction(values);
-
-    if (!res.success) {
-      toast.add({
-        type: "error",
-        title: getErrorNameLabel(res.errorName),
-        description: res.message,
-      });
-    }
-
-    if (res.success) {
-      toast.add({
-        type: "success",
-        description: res.message,
-      });
-      router.replace(ROUTES["admin"]);
-    }
-  }
+    form,
+    onSubmit,
+    isSubmitting,
+    showPassword,
+    togglePasswordVisibility,
+  } = useLoginForm();
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
-      <div className="space-y-2">
-        <label htmlFor="phone" className="text-sm font-medium">
-          شماره همراه
-        </label>
+    <form onSubmit={onSubmit} noValidate className="space-y-4">
+      <Controller
+        control={form.control}
+        name="phone"
+        render={({ field, fieldState }) => (
+          <Field data-invalid={fieldState.invalid}>
+            <FieldLabel htmlFor="phone">شماره همراه</FieldLabel>
 
-        <div className="relative">
-          <Smartphone
-            aria-hidden="true"
-            className="absolute right-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
-          />
+            <div className="relative">
+              <Smartphone
+                aria-hidden="true"
+                className="absolute right-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+              />
 
-          <Input
-            id="phone"
-            type="tel"
-            inputMode="numeric"
-            autoComplete="tel-national"
-            placeholder="09123456789"
-            dir="ltr"
-            aria-invalid={!!errors.phone}
-            aria-describedby={errors.phone ? "phone-error" : undefined}
-            className="pr-11 text-left text-sm"
-            {...register("phone")}
-          />
-        </div>
+              <Input
+                {...field}
+                id="phone"
+                type="tel"
+                inputMode="numeric"
+                autoComplete="tel-national"
+                placeholder="09123456789"
+                dir="ltr"
+                aria-invalid={fieldState.invalid}
+                className="pr-11 text-left text-sm"
+              />
+            </div>
 
-        {errors.phone && (
-          <p id="phone-error" role="alert" className="text-sm text-destructive">
-            {errors.phone.message}
-          </p>
+            <FieldError errors={[fieldState.error]} />
+          </Field>
         )}
-      </div>
+      />
 
-      <div className="space-y-2">
-        <label htmlFor="password" className="text-sm font-medium">
-          رمز عبور
-        </label>
+      <Controller
+        control={form.control}
+        name="password"
+        render={({ field, fieldState }) => (
+          <Field data-invalid={fieldState.invalid}>
+            <FieldLabel htmlFor="password">رمز عبور</FieldLabel>
 
-        <div className="relative">
-          <LockKeyhole
-            aria-hidden="true"
-            className="absolute right-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
-          />
+            <div className="relative">
+              <LockKeyhole
+                aria-hidden="true"
+                className="absolute right-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+              />
 
-          <Input
-            id="password"
-            type={showPassword ? "text" : "password"}
-            autoComplete="current-password"
-            placeholder="رمز عبور خود را وارد کنید"
-            aria-invalid={!!errors.password}
-            aria-describedby={errors.password ? "password-error" : undefined}
-            className="px-11 text-sm"
-            {...register("password")}
-          />
+              <Input
+                {...field}
+                id="password"
+                type={showPassword ? "text" : "password"}
+                autoComplete="current-password"
+                placeholder="رمز عبور خود را وارد کنید"
+                aria-invalid={fieldState.invalid}
+                className="px-11 text-sm"
+              />
 
-          <button
-            type="button"
-            onClick={() => setShowPassword((value) => !value)}
-            aria-label={showPassword ? "مخفی کردن رمز عبور" : "نمایش رمز عبور"}
-            className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-          >
-            {showPassword ? (
-              <EyeOff className="size-5" />
-            ) : (
-              <Eye className="size-5" />
-            )}
-          </button>
-        </div>
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                aria-label={
+                  showPassword ? "مخفی کردن رمز عبور" : "نمایش رمز عبور"
+                }
+                aria-pressed={showPassword}
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              >
+                {showPassword ? (
+                  <EyeOff className="size-5" />
+                ) : (
+                  <Eye className="size-5" />
+                )}
+              </button>
+            </div>
 
-        {errors.password && (
-          <p
-            id="password-error"
-            role="alert"
-            className="text-sm text-destructive"
-          >
-            {errors.password.message}
-          </p>
+            <FieldError errors={[fieldState.error]} />
+          </Field>
         )}
-      </div>
+      />
 
       <div className="flex items-center justify-end">
-        <a
+        <Link
           href="/forgot-password"
           className="text-sm font-medium text-primary hover:underline"
         >
           فراموشی رمز عبور؟
-        </a>
+        </Link>
       </div>
 
       <Button
