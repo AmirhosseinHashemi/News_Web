@@ -26,17 +26,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { useCreateCategory } from "@/features/category/hooks/useCreateCategory";
 
 export function CreateCategoryDialog() {
-  const [open, setOpen] = useState(false);
-  const { form, onSubmit, isPending, reset } = useCreateCategory({
-    onCreated: () => setOpen(false),
-  });
-
-  function handleOpenChange(nextOpen: boolean) {
-    if (!nextOpen) {
-      reset();
-    }
-    setOpen(nextOpen);
-  }
+  const { form, onSubmit, isPending, open, handleOpenChange } =
+    useCreateCategory({
+      onCreated: () => handleOpenChange(false),
+    });
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>

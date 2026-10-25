@@ -1,16 +1,16 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 
 import { toast } from "@/components/ui/toast";
-import { createCategoryAction } from "@/features/category/category.action";
 import {
   type CreateCategoryFormValues,
   createCategorySchema,
 } from "@/features/category/category.schema";
+import { useCreateCategoryMutation } from "@/features/category/hooks/useCreateCategoryMutation";
 import { getErrorNameLabel } from "@/lib/error";
+import { useState } from "react";
 
 type UseCreateCategoryOptions = {
   onCreated?: () => void;
@@ -19,6 +19,8 @@ type UseCreateCategoryOptions = {
 export function useCreateCategory({
   onCreated,
 }: UseCreateCategoryOptions = {}) {
+  const [open, setOpen] = useState(false);
+
   const form = useForm<CreateCategoryFormValues>({
     resolver: zodResolver(createCategorySchema),
     defaultValues: {
@@ -27,47 +29,44 @@ export function useCreateCategory({
     },
   });
 
-  const mutation = useMutation({
-    mutationFn: createCategoryAction,
+  const mutation = useCreateCategoryMutation();
 
-    onSuccess: (response) => {
-      if (!response.success) {
-        response.errors.forEach(({ field, message }) => {
-          form.setError(field as keyof CreateCategoryFormValues, {
-            type: "server",
-            message,
+  function onSubmit(values: CreateCategoryFormValues) {
+    mutation.mutate(values, {
+      onSuccess: (response) => {
+        if (!response.success) {
+          response.errors.forEach(({ field, message }) => {
+            form.setError(field as keyof CreateCategoryFormValues, {
+              type: "server",
+              message,
+            });
           });
-        });
+
+          toast.add({
+            type: "error",
+            title: getErrorNameLabel(response.errorName),
+            description: response.message,
+          });
+
+          return;
+        }
 
         toast.add({
-          type: "error",
-          title: getErrorNameLabel(response.errorName),
+          type: "success",
           description: response.message,
         });
 
-        return;
-      }
+        form.reset();
+        onCreated?.();
+      },
+    });
+  }
 
-      toast.add({
-        type: "success",
-        description: response.message,
-      });
-
-      form.reset();
-      onCreated?.();
-    },
-
-    onError: () => {
-      toast.add({
-        type: "error",
-        title: "خطا در ایجاد دسته‌بندی",
-        description: "ارتباط با سرور برقرار نشد. دوباره تلاش کنید.",
-      });
-    },
-  });
-
-  function onSubmit(values: CreateCategoryFormValues) {
-    mutation.mutate(values);
+  function handleOpenChange(nextOpen: boolean) {
+    if (!nextOpen) {
+      reset();
+    }
+    setOpen(nextOpen);
   }
 
   function reset() {
@@ -80,5 +79,7 @@ export function useCreateCategory({
     onSubmit: form.handleSubmit(onSubmit),
     isPending: mutation.isPending,
     reset,
+    open,
+    handleOpenChange,
   };
 }
