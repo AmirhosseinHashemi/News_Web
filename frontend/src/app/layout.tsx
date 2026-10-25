@@ -1,3 +1,4 @@
+import { QueryProvider } from "@/components/shared/QueryProvider";
 import { ThemeProvider } from "@/components/shared/ThemeProvider";
 import { Toaster } from "@/components/ui/toast";
 import { estedad } from "@/lib/fonts";
@@ -23,8 +24,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Toaster />
-          {children}
+          <QueryProvider>
+            <Toaster />
+            {children}
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>
