@@ -1,6 +1,7 @@
-import type { ApiFailure, ErrorName } from "@/types/api.type";
+import type { ApiError, ApiFailure, ErrorName } from "@/types/api.type";
 
 export const NETWORK_ERR_MSG = "خطایی در اتصال به شبکه رخ داده";
+export const UNKNOWN_ERR_MSG = "خطای ناشناخته ای رخ داده - (NEXT_SERVER)";
 
 export const ERROR_NAME_LABELS = {
   ValidationError: "خطای اعتبارسنجی",
@@ -22,11 +23,12 @@ export const failure = (
   status: number,
   errorName: ApiFailure["errorName"],
   message: string,
+  errors: ApiError[] = [],
 ): ApiFailure => ({
   status,
   success: false,
   message,
   errorName,
-  errors: [],
+  errors,
   timestamp: new Date().toISOString(),
 });
