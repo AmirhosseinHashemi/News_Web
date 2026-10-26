@@ -3,10 +3,11 @@ import { CalendarClock, CalendarPlus, Hash, Link2 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Category } from "@/features/category/category.type";
 import { Detail } from "@/features/category/components/Detail";
+import { EditCategoryDialog } from "@/features/category/components/EditCategoryDialog";
 import { faDateTime, faNumber } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
-const CARD_DETAILS_COUNT = 4;
+const CARD_DETAIL_KEYS = ["id", "slug", "createdAt", "updatedAt"] as const;
 
 interface CategoryCardProps {
   category: Category;
@@ -35,6 +36,8 @@ export function CategoryCard({ category, className }: CategoryCardProps) {
             /{category.slug}
           </p>
         </div>
+
+        <EditCategoryDialog key={category.updatedAt} category={category} />
       </header>
 
       <p className="line-clamp-3 text-sm leading-7 text-muted-foreground">
@@ -85,8 +88,8 @@ export function CategoryCardSkeleton() {
       </div>
 
       <div className="mt-auto grid grid-cols-1 gap-x-4 gap-y-2 border-t pt-4">
-        {Array.from({ length: CARD_DETAILS_COUNT }, (_, index) => (
-          <Skeleton key={index} className="h-4 w-full" />
+        {CARD_DETAIL_KEYS.map((key) => (
+          <Skeleton key={key} className="h-4 w-full" />
         ))}
       </div>
     </div>
