@@ -14,3 +14,7 @@ export const createCategorySchema = z.object({
 });
 
 export type CreateCategoryFormValues = z.infer<typeof createCategorySchema>;
+
+export const updateCategorySchema = createCategorySchema.partial();
+
+export type UpdateCategoryFormValues = z.infer<typeof updateCategorySchema>;

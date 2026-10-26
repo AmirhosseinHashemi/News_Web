@@ -1,4 +1,7 @@
-import { CreateCategoryFormValues } from "@/features/category/category.schema";
+import type {
+  CreateCategoryFormValues,
+  UpdateCategoryFormValues,
+} from "@/features/category/category.schema";
 
 export type Category = {
   id: number;
@@ -10,6 +13,8 @@ export type Category = {
 };
 
 export type CreateCategoryPayload = CreateCategoryFormValues;
+
+export type UpdateCategoryPayload = UpdateCategoryFormValues;
 
 export type GetCategoriesParams = {
   page?: number;
