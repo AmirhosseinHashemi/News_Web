@@ -32,7 +32,9 @@ export async function UserMenu() {
                 {user.firstName.charAt(0) ?? "-"}
               </AvatarFallback>
             </Avatar>
-            <span className="hidden text-sm md:inline">{user.firstName ?? "-"}</span>
+            <span className="hidden text-sm md:inline">
+              {user.firstName ?? "-"}
+            </span>
           </Button>
         }
       ></DropdownMenuTrigger>

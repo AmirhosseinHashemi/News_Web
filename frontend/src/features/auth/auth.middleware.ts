@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 const AUTH_ROUTES = ["/login"];
 const PROTECTED_ROUTES = ["/admin"];
-const BUFFER_MS = 30_000; 
+const BUFFER_MS = 30_000;
 
 type RefreshResult = Awaited<ReturnType<typeof postRefreshReq>>;
 

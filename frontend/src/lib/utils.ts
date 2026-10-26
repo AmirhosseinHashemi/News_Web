@@ -1,4 +1,4 @@
-export { cn } from "cn"
+export { cn } from "cn";
 
 export function parsePage(value: string | undefined) {
   const page = Number.parseInt(value ?? "1", 10);
