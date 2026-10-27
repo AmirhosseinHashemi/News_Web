@@ -48,6 +48,37 @@ export default class PostRepository {
           orderBy: {
             createdAt: "desc",
           },
+          select: {
+            id: true,
+            title: true,
+            slug: true,
+            excerpt: true,
+            status: true,
+            createdAt: true,
+            publishedAt: true,
+            updatedAt: true,
+            deletedAt: true,
+
+            author: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+              },
+            },
+            category: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+            cover: {
+              select: {
+                filename: true,
+                type: true,
+              },
+            },
+          },
         }),
         this.prisma.post.count({
           where,
