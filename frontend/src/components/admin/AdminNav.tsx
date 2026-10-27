@@ -1,8 +1,9 @@
 "use client";
 
+import { ROUTES } from "@/config/routes";
 import { cn } from "@/lib/utils";
 import type { LucideIcon } from "lucide-react";
-import { FolderTree, LayoutDashboard, Newspaper, Users } from "lucide-react";
+import { FolderTree, LayoutDashboard, Newspaper } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -14,13 +15,9 @@ interface NavItem {
 }
 
 export const ADMIN_NAV: NavItem[] = [
-  { title: "داشبورد", href: "/admin", icon: LayoutDashboard, exact: true },
-  { title: "خبرها", href: "/admin/articles", icon: Newspaper },
-  { title: "دسته‌بندی‌ها", href: "/admin/categories", icon: FolderTree },
-  { title: "کاربران", href: "/admin/users", icon: Users },
-  //   { title: "رسانه‌ها", href: "/admin/media", icon: ImageIcon },
-  //   { title: "نظرات", href: "/admin/comments", icon: MessageSquare },
-  //   { title: "تنظیمات", href: "/admin/settings", icon: Settings },
+  { title: "داشبورد", href: ROUTES.admin, icon: LayoutDashboard, exact: true },
+  { title: "خبرها", href: ROUTES.articles, icon: Newspaper },
+  { title: "دسته‌بندی‌ها", href: ROUTES.categories, icon: FolderTree },
 ];
 
 export function AdminNav() {
