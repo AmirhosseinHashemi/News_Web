@@ -6,7 +6,7 @@ import type {
 } from "@/features/category/category.type";
 import { http } from "@/lib/http";
 
-export const CATEGORIES_PAGE_SIZE = 5;
+export const CATEGORIES_PAGE_SIZE = 6;
 
 export function createCategoryReq(payload: CreateCategoryPayload) {
   return http<Category>("/admin/categories", {
