@@ -1,19 +1,16 @@
-import type {
-  Article,
-  GetArticlesParams,
-} from "@/features/article/article.type";
+import type { GetPostsParams, Post } from "@/features/post/post.type";
 import { http } from "@/lib/http";
 
-export const ARTICLES_PAGE_SIZE = 9;
+export const POST_PAGE_SIZE = 9;
 
-export function getArticlesReq({
+export function getPostsReq({
   page = 1,
-  limit = ARTICLES_PAGE_SIZE,
+  limit = POST_PAGE_SIZE,
   search,
   categoryId,
   typeId,
   locationId,
-}: GetArticlesParams = {}) {
+}: GetPostsParams = {}) {
   const params = new URLSearchParams({
     page: String(page),
     limit: String(limit),
@@ -25,5 +22,5 @@ export function getArticlesReq({
   if (typeId) params.set("typeId", String(typeId));
   if (locationId) params.set("locationId", String(locationId));
 
-  return http<Article[]>(`/admin/posts?${params.toString()}`);
+  return http<Post[]>(`/admin/posts?${params.toString()}`);
 }
