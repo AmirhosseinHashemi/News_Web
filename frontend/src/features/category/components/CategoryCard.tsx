@@ -1,8 +1,8 @@
 import { CalendarClock, CalendarPlus, Hash, Link2 } from "lucide-react";
 
+import { Detail } from "@/components/shared/Detail";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Category } from "@/features/category/category.type";
-import { Detail } from "@/features/category/components/Detail";
 import { EditCategoryDialog } from "@/features/category/components/EditCategoryDialog";
 import { faDateTime, faNumber } from "@/lib/format";
 import { cn } from "@/lib/utils";

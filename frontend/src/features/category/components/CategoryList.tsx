@@ -1,6 +1,8 @@
 import { RefreshCw } from "lucide-react";
 import Link from "next/link";
 
+import { PaginationBar } from "@/components/shared/PaginationBar";
+import { SearchField } from "@/components/shared/SearchField";
 import { EmptyState, ErrorState } from "@/components/shared/StateView";
 import { buttonVariants } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -11,8 +13,6 @@ import {
   CategoryCard,
   CategoryCardSkeleton,
 } from "@/features/category/components/CategoryCard";
-import { CategoryPagination } from "@/features/category/components/CategoryPagination";
-import { CategorySearch } from "@/features/category/components/CategorySearch";
 import { parsePage } from "@/lib/utils";
 
 const SKELETON_COUNT = 6;
@@ -53,7 +53,11 @@ export async function CategoryList({ searchParams }: CategoryListProps) {
 
   return (
     <div className="space-y-5">
-      <CategorySearch initialValue={search} />
+      <SearchField
+        initialValue={search}
+        placeholder="جستجوی دسته‌بندی…"
+        ariaLabel="جستجوی دسته‌بندی"
+      />
 
       {categories.length === 0 && (
         <EmptyState
@@ -88,10 +92,11 @@ export async function CategoryList({ searchParams }: CategoryListProps) {
       )}
 
       {meta && (
-        <CategoryPagination
+        <PaginationBar
           meta={meta}
           basePath={ROUTES.categories}
           search={search}
+          itemLabel="دسته‌بندی"
         />
       )}
     </div>
