@@ -69,7 +69,7 @@ const defaultData: ArticleCardData[] = [
     title: "پیروزی پرگل تیم ملی در دیدار تدارکاتی",
     category: { key: "sports" },
     cover: { src: IMG("rahgh-sports"), alt: "بازیکنان تیم ملی" },
-    media: { type: "video", totalSeconds: 134 },
+    media: { type: "VIDEO", totalSeconds: 134 },
     publishedAt: "2025-06-10T18:45:00+03:30",
     readingMinutes: 3,
   },
@@ -90,7 +90,7 @@ const videoData: ArticleCardData[] = [
     title: "گزارش ویدیویی: یک روز در بزرگ‌ترین بازار میوه تهران",
     category: { key: "society" },
     cover: { src: IMG("rahgh-market"), alt: "" },
-    media: { type: "video", totalSeconds: 287 },
+    media: { type: "VIDEO", totalSeconds: 287 },
     publishedAt: "2025-06-10T10:00:00+03:30",
     readingMinutes: 2,
   },
@@ -99,7 +99,7 @@ const videoData: ArticleCardData[] = [
     title: "مصاحبه اختصاصی با سرمربی تیم ملی",
     category: { key: "sports" },
     cover: { src: IMG("rahgh-coach"), alt: "" },
-    media: { type: "video", totalSeconds: 612 },
+    media: { type: "VIDEO", totalSeconds: 612 },
     publishedAt: "2025-06-09T19:30:00+03:30",
     readingMinutes: 4,
   },
@@ -119,7 +119,7 @@ const listData: ArticleCardData[] = [
     title: "بازارچه صنایع‌دستی در پارک ملت گشایش یافت",
     category: { key: "society" },
     cover: { src: IMG("rahgh-bazaar"), alt: "" },
-    media: { type: "gallery", count: 18 },
+    media: { type: "IMAGE", count: 18 },
     publishedAt: "2025-06-10T11:20:00+03:30",
     readingMinutes: 2,
   },
@@ -488,9 +488,9 @@ export default function DesignSystemPage() {
               <div className="mt-3 flex flex-wrap items-center gap-3">
                 <LiveBadge />
                 <LiveBadge label="فوری" />
-                <MediaBadge type="video" totalSeconds={134} />
-                <MediaBadge type="photo" />
-                <MediaBadge type="gallery" count={12} />
+                <MediaBadge type="VIDEO" totalSeconds={134} />
+                <MediaBadge type="IMAGE" />
+                <MediaBadge type="IMAGE" count={12} />
               </div>
               <div className="mt-4 max-w-md rounded-lg border bg-card p-4">
                 <Byline

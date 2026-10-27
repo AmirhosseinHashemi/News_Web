@@ -1,9 +1,8 @@
+import { MediaType } from "@/features/post/post.type";
 import { faDuration, faNumber } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { Camera, Images, Play, type LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
-
-export type MediaType = "video" | "photo" | "gallery";
 
 export interface MediaInfo {
   type: MediaType;
@@ -12,9 +11,8 @@ export interface MediaInfo {
 }
 
 const META: Record<MediaType, { icon: LucideIcon; label: string }> = {
-  video: { icon: Play, label: "ویدیو" },
-  photo: { icon: Camera, label: "عکس" },
-  gallery: { icon: Images, label: "گالری" },
+  VIDEO: { icon: Play, label: "ویدیو" },
+  IMAGE: { icon: Camera, label: "عکس" },
 };
 
 interface Props extends MediaInfo {
@@ -26,10 +24,10 @@ export function MediaBadge({ type, totalSeconds, count, className }: Props) {
 
   let content: ReactNode = label;
 
-  if (type === "video" && totalSeconds) {
+  if (type === "VIDEO" && totalSeconds) {
     content = `${faDuration(totalSeconds)}`;
   }
-  if (type === "gallery" && count) {
+  if (type === "IMAGE" && count) {
     content = `${faNumber(count)} تصویر`;
   }
 
