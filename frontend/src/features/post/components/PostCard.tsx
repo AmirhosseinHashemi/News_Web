@@ -1,9 +1,10 @@
+import { Skeleton } from "@/components/ui/skeleton";
 import { Byline } from "@/features/post/components/Byline";
 import { CardBadges } from "@/features/post/components/CardBadges";
 import { CardMedia } from "@/features/post/components/CardMedia";
 import { CardMeta } from "@/features/post/components/CardMeta";
 import { StretchedLink } from "@/features/post/components/StretchedLink";
-import { Post, PostCardVariant } from "@/features/post/post.type";
+import type { Post, PostCardVariant } from "@/features/post/post.type";
 import { cn } from "@/lib/utils";
 
 interface PostCardProps {
@@ -32,6 +33,7 @@ export function PostCard({
       >
         <CardMedia
           cover={data.cover}
+          alt={data.title}
           priority={priority}
           sizes="(max-width: 1024px) 100vw, 1024px"
           className="aspect-video w-full"
@@ -70,6 +72,7 @@ export function PostCard({
       >
         <CardMedia
           cover={data.cover}
+          alt={data.title}
           sizes="160px"
           className="aspect-square w-28 shrink-0 rounded-md sm:w-36"
         />
@@ -117,6 +120,7 @@ export function PostCard({
     >
       <CardMedia
         cover={data.cover}
+        alt={data.title}
         priority={priority}
         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
         className="aspect-video"
@@ -138,5 +142,24 @@ export function PostCard({
         <CardMeta data={data} showCategory={false} className="mt-auto pt-2" />
       </div>
     </article>
+  );
+}
+
+export function PostCardSkeleton() {
+  return (
+    <div
+      aria-hidden="true"
+      className="overflow-hidden rounded-lg border bg-card"
+    >
+      <Skeleton className="aspect-video w-full rounded-none" />
+
+      <div className="space-y-2 p-4">
+        <Skeleton className="h-5 w-5/6" />
+        <Skeleton className="h-5 w-2/3" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-4/5" />
+        <Skeleton className="mt-4 h-3 w-1/3" />
+      </div>
+    </div>
   );
 }
