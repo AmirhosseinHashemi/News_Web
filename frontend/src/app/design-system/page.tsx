@@ -1,18 +1,11 @@
-import { Loader2, Plus } from "lucide-react";
+import { Loader2, Plus, ShieldAlert } from "lucide-react";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-
-import {
-  Byline,
-  CategoryBadge,
-  LiveBadge,
-  MediaBadge,
-} from "@/components/news";
-
-import { ArticleCard, ArticleCardData } from "@/components/news/ArticleCard";
+import { CategoryBadge } from "@/components/news/CategoryBadge";
 import { SectionHeader } from "@/components/shared/SectionHeader";
+import { EmptyState, ErrorState } from "@/components/shared/StateView";
+import { StatusPage } from "@/components/shared/StatusPage";
 import { ThemeToggle } from "@/components/shared/ThemeToggle";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -26,21 +19,65 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-
-import { EmptyState, ErrorState } from "@/components/shared/StateView";
-import { StatusPage } from "@/components/shared/StatusPage";
-import { ShieldAlert } from "lucide-react";
-
 import { CATEGORIES, type CategoryKey } from "@/config/categories";
+import { Byline } from "@/features/post/components/Byline";
+import { LiveBadge } from "@/features/post/components/LiveBadge";
+import { MediaBadge } from "@/features/post/components/MediaBadge";
+import { PostCard } from "@/features/post/components/PostCard";
+import type { MediaInfo, Post } from "@/features/post/post.type";
 import { faDate, faDuration, faNumber } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "دیزاین سیستم" };
 
 /* ───────── داده‌های نمونه ───────── */
+type SampleCardData = {
+  slug: string;
+  title: string;
+  summary?: string;
+  category?: { key: CategoryKey };
+  cover?: { src: string; alt: string };
+  media?: MediaInfo;
+  authorName?: string;
+  publishedAt?: string;
+  readingMinutes?: number;
+  isLive?: boolean;
+};
+
+const toPost = (data: SampleCardData): Post => {
+  const publishedAt = data.publishedAt ?? null;
+  const createdAt = publishedAt ?? new Date().toISOString();
+
+  return {
+    id: data.slug.length,
+    title: data.title,
+    slug: data.slug,
+    excerpt: data.summary ?? null,
+    status: "PUBLISHED",
+    createdAt,
+    publishedAt,
+    updatedAt: createdAt,
+    deletedAt: null,
+    author: {
+      id: 0,
+      firstName: data.authorName ?? "خبرنگار",
+      lastName: "",
+    },
+    category: {
+      id: 0,
+      name:
+        CATEGORIES.find((category) => category.key === data.category?.key)
+          ?.label ?? "عمومی",
+    },
+    cover: data.cover
+      ? { filename: data.cover.src, type: data.media?.type ?? "IMAGE" }
+      : null,
+  };
+};
+
 const IMG = (seed: string) => `https://picsum.photos/seed/${seed}/800/450`;
 
-const heroData: ArticleCardData = {
+const heroData: SampleCardData = {
   slug: "energy-deal",
   title: "توافق تازه درباره تبادل انرژی در منطقه امضا شد",
   summary:
@@ -53,7 +90,7 @@ const heroData: ArticleCardData = {
   isLive: true,
 };
 
-const defaultData: ArticleCardData[] = [
+const defaultData: SampleCardData[] = [
   {
     slug: "inflation-spring",
     title: "نرخ تورم در بهار به مرز ۳۰ درصد رسید",
@@ -84,7 +121,7 @@ const defaultData: ArticleCardData[] = [
   },
 ];
 
-const videoData: ArticleCardData[] = [
+const videoData: SampleCardData[] = [
   {
     slug: "v1",
     title: "گزارش ویدیویی: یک روز در بزرگ‌ترین بازار میوه تهران",
@@ -105,7 +142,7 @@ const videoData: ArticleCardData[] = [
   },
 ];
 
-const listData: ArticleCardData[] = [
+const listData: SampleCardData[] = [
   {
     slug: "l1",
     title: "نشست شورای شهر با دستور کار بودجه سالانه برگزار شد",
@@ -133,7 +170,7 @@ const listData: ArticleCardData[] = [
   },
 ];
 
-const compactData: ArticleCardData[] = [
+const compactData: SampleCardData[] = [
   {
     slug: "c1",
     title: "اعلام برنامه زمان‌بندی پخش سریال‌های تابستان",
@@ -373,7 +410,7 @@ export default function DesignSystemPage() {
                     key={cat}
                     cat={cat}
                     cls={cls}
-                    label={CATEGORIES.find((c) => c.key === cat)!.label}
+                    label={CATEGORIES.find((c) => c.key === cat)?.label ?? cat}
                   />
                 ))}
               </div>
@@ -495,7 +532,7 @@ export default function DesignSystemPage() {
               <div className="mt-4 max-w-md rounded-lg border bg-card p-4">
                 <Byline
                   name="سارا محمدی"
-                  date="2025-06-10T12:30:00+03:30"
+                  publishedAt="2025-06-10T12:30:00+03:30"
                   readingMinutes={6}
                 />
               </div>
@@ -510,7 +547,7 @@ export default function DesignSystemPage() {
               <SubLabel>
                 <code dir="ltr">variant=&quot;hero&quot;</code>
               </SubLabel>
-              <ArticleCard data={heroData} variant="hero" />
+              <PostCard data={toPost(heroData)} variant="hero" />
             </div>
 
             <div className="space-y-3">
@@ -521,12 +558,12 @@ export default function DesignSystemPage() {
               </SubLabel>
               <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 {defaultData.map((d) => (
-                  <ArticleCard key={d.slug} data={d} />
+                  <PostCard key={d.slug} data={toPost(d)} />
                 ))}
               </div>
               <div className="grid gap-5 pt-4 sm:grid-cols-2">
                 {videoData.map((d) => (
-                  <ArticleCard key={d.slug} data={d} variant="video" />
+                  <PostCard key={d.slug} data={toPost(d)} variant="video" />
                 ))}
               </div>
             </div>
@@ -538,7 +575,7 @@ export default function DesignSystemPage() {
               <SectionHeader title="سیاسی" href="#" />
               <div className="grid gap-3 lg:grid-cols-2">
                 {listData.map((d) => (
-                  <ArticleCard key={d.slug} data={d} variant="list" />
+                  <PostCard key={d.slug} data={toPost(d)} variant="list" />
                 ))}
               </div>
             </div>
@@ -550,7 +587,7 @@ export default function DesignSystemPage() {
               <SectionHeader title="پربازدیدترین" />
               <div className="max-w-2xl space-y-3">
                 {compactData.map((d) => (
-                  <ArticleCard key={d.slug} data={d} variant="compact" />
+                  <PostCard key={d.slug} data={toPost(d)} variant="compact" />
                 ))}
               </div>
             </div>
