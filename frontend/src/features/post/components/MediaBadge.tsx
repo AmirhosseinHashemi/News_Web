@@ -1,14 +1,8 @@
-import { MediaType } from "@/features/post/post.type";
+import type { MediaInfo, MediaType } from "@/features/post/post.type";
 import { faDuration, faNumber } from "@/lib/format";
 import { cn } from "@/lib/utils";
-import { Camera, Images, Play, type LucideIcon } from "lucide-react";
+import { Camera, Play, type LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
-
-export interface MediaInfo {
-  type: MediaType;
-  totalSeconds?: number;
-  count?: number;
-}
 
 const META: Record<MediaType, { icon: LucideIcon; label: string }> = {
   VIDEO: { icon: Play, label: "ویدیو" },

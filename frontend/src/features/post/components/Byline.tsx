@@ -3,14 +3,19 @@ import { faDate, faNumber } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 interface Props {
-  name?: string;
-  date?: string;
+  name: string;
+  publishedAt: string | null;
   readingMinutes?: number;
   className?: string;
 }
 
-export function Byline({ name, date, readingMinutes, className }: Props) {
-  if (!name && !date && readingMinutes === undefined) return null;
+export function Byline({
+  name,
+  publishedAt,
+  readingMinutes,
+  className,
+}: Props) {
+  if (!name && !publishedAt && readingMinutes === undefined) return null;
 
   return (
     <div
@@ -29,8 +34,8 @@ export function Byline({ name, date, readingMinutes, className }: Props) {
           <span className="font-medium text-foreground">{name}</span>
         </span>
       )}
-      {name && date && <Dot />}
-      {date && <time dateTime={date}>{faDate(date)}</time>}
+      {name && publishedAt && <Dot />}
+      {publishedAt && <time dateTime={publishedAt}>{faDate(publishedAt)}</time>}
       {readingMinutes !== undefined && (
         <>
           <Dot />

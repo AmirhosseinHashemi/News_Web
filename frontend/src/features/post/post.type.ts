@@ -33,9 +33,17 @@ export type PostsPageSearchParams = {
   search?: string;
 };
 
+export type PostCardVariant = "hero" | "default" | "list" | "compact" | "video";
+
 export type MediaType = "IMAGE" | "VIDEO";
 
 export type Media = {
   fileName: string;
   type: MediaType;
 };
+
+export interface MediaInfo {
+  type: MediaType;
+  totalSeconds?: number;
+  count?: number;
+}
