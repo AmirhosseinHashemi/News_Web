@@ -16,7 +16,7 @@ interface NavItem {
 
 export const ADMIN_NAV: NavItem[] = [
   { title: "داشبورد", href: ROUTES.admin, icon: LayoutDashboard, exact: true },
-  { title: "خبرها", href: ROUTES.articles, icon: Newspaper },
+  { title: "خبرها", href: ROUTES.posts, icon: Newspaper },
   { title: "دسته‌بندی‌ها", href: ROUTES.categories, icon: FolderTree },
 ];
 
