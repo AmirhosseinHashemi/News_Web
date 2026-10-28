@@ -3,7 +3,7 @@ import { http } from "@/lib/http";
 
 export const POST_PAGE_SIZE = 9;
 
-export function getPostsReq({
+export async function getPostsReq({
   page = 1,
   limit = POST_PAGE_SIZE,
   search,
