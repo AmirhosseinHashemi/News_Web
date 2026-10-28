@@ -8,6 +8,8 @@ const envSchema = z.object({
 
   DATABASE_URL: z.string().min(1),
 
+  CLOUDINARY_URL: z.string().min(1),
+
   ADMIN_NAME: z.string(),
   ADMIN_EMAIL: z.string(),
   ADMIN_PHONE: z.string(),
