@@ -1,5 +1,5 @@
-import { User } from "@/features/auth/auth.type";
-import { Category } from "@/features/category/category.type";
+import type { User } from "@/features/auth/auth.type";
+import type { Category } from "@/features/category/category.type";
 
 export type PostStatus = "DRAFT" | "PUBLISHED";
 
@@ -31,6 +31,7 @@ export type PostsPageSearchParams = {
   page?: string;
   limit?: string;
   search?: string;
+  categoryId?: string;
 };
 
 export type PostCardVariant = "hero" | "default" | "list" | "compact" | "video";
@@ -38,7 +39,7 @@ export type PostCardVariant = "hero" | "default" | "list" | "compact" | "video";
 export type MediaType = "IMAGE" | "VIDEO";
 
 export type Media = {
-  fileName: string;
+  filename: string;
   type: MediaType;
 };
 
