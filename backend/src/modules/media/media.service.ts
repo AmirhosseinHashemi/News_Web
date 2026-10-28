@@ -1,12 +1,11 @@
 import {
-    generateImageFilename,
-    processImage,
+  generateImageFilename,
+  processImage,
 } from "../../common/image/image.service.js";
 import {
-    deleteFile,
-    getFileStorageUrl,
-    saveFile,
-} from "../../common/storage/storage.local.js";
+  deleteFile,
+  saveFile,
+} from "../../common/storage/storage.cloudinary.js";
 import BadRequestError from "../../errors/BadRequestError.js";
 import { MediaType } from "../../generated/prisma/enums.js";
 import MediaRepository from "./media.repository.js";
@@ -20,11 +19,11 @@ export default class MediaService {
     const processedBuffer = await processImage(file.buffer);
     const imageName = generateImageFilename();
 
-    const { filename, path } = await saveFile(processedBuffer, imageName);
+    const uploaded = await saveFile(processedBuffer, imageName);
 
     try {
       const media = await this.mediaRepository.create({
-        filename,
+        filename: uploaded.url,
         mimeType: "image/webp",
         size: processedBuffer.length,
         type: MediaType.IMAGE,
@@ -32,10 +31,10 @@ export default class MediaService {
 
       return {
         id: media.id,
-        url: getFileStorageUrl(media.filename),
+        url: uploaded.url,
       };
     } catch (error) {
-      await deleteFile(path);
+      await deleteFile(uploaded.publicId);
       throw error;
     }
   }
