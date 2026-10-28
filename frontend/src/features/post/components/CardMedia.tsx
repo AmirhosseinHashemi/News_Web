@@ -1,9 +1,9 @@
-import { Play } from "lucide-react";
-import Image from "next/image";
 import { MediaBadge } from "@/features/post/components/MediaBadge";
 import { MediaPlaceholder } from "@/features/post/components/MediaPlaceholder";
 import type { Post } from "@/features/post/post.type";
 import { cn } from "@/lib/utils";
+import { Play } from "lucide-react";
+import Image from "next/image";
 
 interface CardMediaProps {
   cover: Post["cover"];
@@ -21,6 +21,7 @@ export function CardMedia({
   className,
 }: CardMediaProps) {
   const isVideo = cover?.type === "VIDEO";
+
   return (
     <div className={cn("relative overflow-hidden bg-muted", className)}>
       {cover ? (
