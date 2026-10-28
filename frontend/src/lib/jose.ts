@@ -17,6 +17,12 @@ export async function decryptSession(session: string): Promise<UserSession> {
 
     return payload as UserSession;
   } catch (error) {
-    throw new Error("خطا در اعتبارسنجی سشن کابر");
+    console.error("[auth] Session verification failed:", {
+      name: error instanceof Error ? error.name : "UnknownError",
+      message: error instanceof Error ? error.message : String(error),
+      cookieLength: session.length,
+    });
+
+    throw error;
   }
 }
