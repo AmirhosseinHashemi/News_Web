@@ -1,30 +1,40 @@
-import { MediaBadge, MediaPlaceholder } from "@/components/news";
-import { Post } from "@/features/post/post.type";
-import { cn } from "@/lib/utils";
 import { Play } from "lucide-react";
 import Image from "next/image";
+import { MediaBadge } from "@/features/post/components/MediaBadge";
+import { MediaPlaceholder } from "@/features/post/components/MediaPlaceholder";
+import type { Post } from "@/features/post/post.type";
+import { cn } from "@/lib/utils";
 
 interface CardMediaProps {
   cover: Post["cover"];
+  alt?: string;
   sizes?: string;
   priority?: boolean;
   className?: string;
 }
- 
-export function CardMedia({ cover, sizes, priority, className }: CardMediaProps) {
-  if (!cover) return <MediaPlaceholder />;
 
-  const isVideo = cover.type === "VIDEO";
+export function CardMedia({
+  cover,
+  alt = "",
+  sizes,
+  priority,
+  className,
+}: CardMediaProps) {
+  const isVideo = cover?.type === "VIDEO";
   return (
     <div className={cn("relative overflow-hidden bg-muted", className)}>
-      <Image
-        src={cover.fileName}
-        alt={cover.fileName}
-        fill
-        sizes={sizes}
-        priority={priority}
-        className="object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04]"
-      />
+      {cover ? (
+        <Image
+          src={cover.filename}
+          alt={alt}
+          fill
+          sizes={sizes}
+          priority={priority}
+          className="object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04]"
+        />
+      ) : (
+        <MediaPlaceholder />
+      )}
       {isVideo && (
         <span
           aria-hidden
@@ -36,10 +46,12 @@ export function CardMedia({ cover, sizes, priority, className }: CardMediaProps)
         </span>
       )}
 
-      <MediaBadge
-        type={cover.type}
-        className="absolute bottom-2 inset-e-2 z-10"
-      />
+      {cover && (
+        <MediaBadge
+          type={cover.type}
+          className="absolute bottom-2 inset-e-2 z-10"
+        />
+      )}
     </div>
   );
 }
