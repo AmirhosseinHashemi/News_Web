@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   experimental: {
     agentFeedback: false,
   },
@@ -17,10 +16,8 @@ const nextConfig: NextConfig = {
   },
   images: {
     remotePatterns: [
-      // فقط برای دموی صفحه دیزاین سیستم
       { protocol: "https", hostname: "picsum.photos" },
-      // وقتی دامنه فضای ذخیره‌سازی مشخص شد:
-      // { protocol: "https", hostname: "files.rahgh.ir" },
+      { protocol: "https", hostname: "res.cloudinary.com" },
     ],
   },
 };
