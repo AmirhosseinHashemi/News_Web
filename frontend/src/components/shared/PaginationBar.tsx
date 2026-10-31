@@ -16,6 +16,7 @@ interface PaginationBarProps {
   basePath: string;
   search: string;
   itemLabel: string;
+  filters?: Record<string, string | undefined>;
 }
 
 export function PaginationBar({
@@ -23,6 +24,7 @@ export function PaginationBar({
   basePath,
   search,
   itemLabel,
+  filters,
 }: PaginationBarProps) {
   if (meta.totalPages <= 1) return null;
 
@@ -30,11 +32,11 @@ export function PaginationBar({
   const lastItem = Math.min(meta.currentPage * meta.limit, meta.totalItems);
 
   const previousHref = meta.hasPreviousPage
-    ? buildHref(basePath, meta.currentPage - 1, search)
+    ? buildHref(basePath, meta.currentPage - 1, search, filters)
     : null;
 
   const nextHref = meta.hasNextPage
-    ? buildHref(basePath, meta.currentPage + 1, search)
+    ? buildHref(basePath, meta.currentPage + 1, search, filters)
     : null;
 
   return (
@@ -123,10 +125,20 @@ export function PaginationBar({
   );
 }
 
-function buildHref(basePath: string, page: number, search: string) {
+function buildHref(
+  basePath: string,
+  page: number,
+  search: string,
+  filters?: Record<string, string | undefined>,
+) {
   const params = new URLSearchParams();
 
   if (search) params.set("search", search);
+
+  for (const [key, value] of Object.entries(filters ?? {})) {
+    if (value) params.set(key, value);
+  }
+
   if (page > 1) params.set("page", String(page));
 
   const query = params.toString();
