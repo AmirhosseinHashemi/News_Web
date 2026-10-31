@@ -12,6 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { PostRowActions } from "@/features/post/components/PostRowActions";
 import { PostStatusBadge } from "@/features/post/components/PostStatusBadge";
 import type { Post } from "@/features/post/post.type";
 import { faDate } from "@/lib/format";
@@ -47,8 +48,11 @@ export function PostTable({ posts }: PostTableProps) {
             <TableHead scope="col" className="hidden sm:table-cell">
               تاریخ انتشار
             </TableHead>
-            <TableHead scope="col" className="hidden pe-4 xl:table-cell">
+            <TableHead scope="col" className="hidden xl:table-cell">
               تاریخ ایجاد
+            </TableHead>
+            <TableHead scope="col" className="w-12 pe-4">
+              <span className="sr-only">عملیات</span>
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -88,8 +92,12 @@ export function PostTable({ posts }: PostTableProps) {
                 {post.publishedAt ? faDate(post.publishedAt) : "—"}
               </TableCell>
 
-              <TableCell className="hidden whitespace-nowrap pe-4 text-muted-foreground xl:table-cell">
+              <TableCell className="hidden whitespace-nowrap text-muted-foreground xl:table-cell">
                 {faDate(post.createdAt)}
+              </TableCell>
+
+              <TableCell className="pe-4 text-end">
+                <PostRowActions post={post} />
               </TableCell>
             </TableRow>
           ))}
@@ -142,6 +150,7 @@ export function PostTableSkeleton() {
             </div>
 
             <Skeleton className="hidden h-5 w-16 rounded-full sm:block" />
+            <Skeleton className="size-8 shrink-0 rounded-md" />
           </div>
         ))}
       </div>
