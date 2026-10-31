@@ -3,6 +3,16 @@ import type { Category } from "@/features/category/category.type";
 
 export type PostStatus = "DRAFT" | "PUBLISHED";
 
+export type PostTypeOption = {
+  id: number;
+  name: string;
+};
+
+export type PostLocationOption = {
+  id: number;
+  name: string;
+};
+
 export type Post = {
   id: number;
   title: string;
