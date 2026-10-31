@@ -13,7 +13,7 @@ import {
   CategoryCard,
   CategoryCardSkeleton,
 } from "@/features/category/components/CategoryCard";
-import { parsePage } from "@/lib/utils";
+import { buildHref, parsePage } from "@/lib/utils";
 
 const SKELETON_COUNT = 6;
 
@@ -35,7 +35,7 @@ export async function CategoryList({ searchParams }: CategoryListProps) {
         description={response.message}
         actions={
           <Link
-            href={buildHref(search)}
+            href={buildHref(ROUTES.categories, { search })}
             className={buttonVariants({
               variant: "outline",
               size: "sm",
@@ -120,10 +120,4 @@ export function CategoryListSkeleton() {
       </div>
     </div>
   );
-}
-
-function buildHref(search: string) {
-  if (!search) return ROUTES.categories;
-  const params = new URLSearchParams({ search });
-  return `${ROUTES.categories}?${params.toString()}`;
 }

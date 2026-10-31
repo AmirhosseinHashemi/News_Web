@@ -8,7 +8,7 @@ import {
   PaginationItem,
 } from "@/components/ui/pagination";
 import { faNumber } from "@/lib/format";
-import { cn } from "@/lib/utils";
+import { buildHref, cn } from "@/lib/utils";
 import type { ApiMeta } from "@/types/api.type";
 
 interface PaginationBarProps {
@@ -32,11 +32,11 @@ export function PaginationBar({
   const lastItem = Math.min(meta.currentPage * meta.limit, meta.totalItems);
 
   const previousHref = meta.hasPreviousPage
-    ? buildHref(basePath, meta.currentPage - 1, search, filters)
+    ? buildPageHref(basePath, meta.currentPage - 1, search, filters)
     : null;
 
   const nextHref = meta.hasNextPage
-    ? buildHref(basePath, meta.currentPage + 1, search, filters)
+    ? buildPageHref(basePath, meta.currentPage + 1, search, filters)
     : null;
 
   return (
@@ -125,22 +125,15 @@ export function PaginationBar({
   );
 }
 
-function buildHref(
+function buildPageHref(
   basePath: string,
   page: number,
   search: string,
   filters?: Record<string, string | undefined>,
 ) {
-  const params = new URLSearchParams();
-
-  if (search) params.set("search", search);
-
-  for (const [key, value] of Object.entries(filters ?? {})) {
-    if (value) params.set(key, value);
-  }
-
-  if (page > 1) params.set("page", String(page));
-
-  const query = params.toString();
-  return query ? `${basePath}?${query}` : basePath;
+  return buildHref(basePath, {
+    search,
+    ...filters,
+    page: page > 1 ? page : undefined,
+  });
 }

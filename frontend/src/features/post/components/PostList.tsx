@@ -15,7 +15,7 @@ import {
 } from "@/features/post/components/PostTable";
 import { getPostsReq } from "@/features/post/post.api";
 import type { PostsPageSearchParams } from "@/features/post/post.type";
-import { parsePage, parsePositiveInt } from "@/lib/utils";
+import { buildHref, parsePage, parsePositiveInt } from "@/lib/utils";
 
 interface PostListProps {
   searchParams: Promise<PostsPageSearchParams>;
@@ -39,7 +39,7 @@ export async function PostList({ searchParams }: PostListProps) {
         description={postsResponse.message}
         actions={
           <Link
-            href={buildHref(search, categoryId)}
+            href={buildHref(ROUTES.posts, { search, categoryId })}
             className={buttonVariants({ variant: "outline", size: "sm" })}
           >
             <RefreshCw className="size-4" aria-hidden="true" />
@@ -133,14 +133,4 @@ function getEmptyDescription(search: string, categoryName?: string) {
     return `در دسته «${categoryName}» هنوز خبری منتشر نشده است.`;
 
   return "هنوز خبری منتشر نشده است.";
-}
-
-function buildHref(search: string, categoryId: number | null) {
-  const params = new URLSearchParams();
-
-  if (search) params.set("search", search);
-  if (categoryId) params.set("categoryId", String(categoryId));
-
-  const query = params.toString();
-  return query ? `${ROUTES.posts}?${query}` : ROUTES.posts;
 }
