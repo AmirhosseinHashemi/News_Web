@@ -2,6 +2,7 @@ export const ROUTES = {
   login: "/login",
   admin: "/admin",
   posts: "/admin/posts",
+  postCreate: "/admin/posts/create",
   categories: "/admin/categories",
 } as const;
 
