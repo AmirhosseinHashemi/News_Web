@@ -7,6 +7,8 @@ import {
   saveFile,
 } from "../../common/storage/storage.cloudinary.js";
 import BadRequestError from "../../errors/BadRequestError.js";
+import ConflictError from "../../errors/ConflictError.js";
+import NotFoundError from "../../errors/NotFoundError.js";
 import { MediaType } from "../../generated/prisma/enums.js";
 import MediaRepository from "./media.repository.js";
 
@@ -23,7 +25,8 @@ export default class MediaService {
 
     try {
       const media = await this.mediaRepository.create({
-        filename: uploaded.url,
+        url: uploaded.url,
+        publicId: uploaded.publicId,
         mimeType: "image/webp",
         size: processedBuffer.length,
         type: MediaType.IMAGE,
@@ -31,11 +34,30 @@ export default class MediaService {
 
       return {
         id: media.id,
+        publicId: uploaded.publicId,
         url: uploaded.url,
       };
     } catch (error) {
       await deleteFile(uploaded.publicId);
       throw error;
     }
+  }
+
+  async delete(publicId: string) {
+    const media = await this.mediaRepository.findByPublicId(publicId);
+
+    if (!media) {
+      throw new NotFoundError("مدیا پیدا نشد");
+    }
+
+    if (media.coverFor) {
+      throw new ConflictError({
+        message: "این مدیا به عنوان کاور یک پست استفاده شده است",
+      });
+    }
+
+    await deleteFile(media.publicId!);
+
+    await this.mediaRepository.delete(publicId);
   }
 }

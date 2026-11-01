@@ -22,4 +22,25 @@ export default class MediaRepository {
       })
     );
   }
+
+  async findByPublicId(publicId: string) {
+    return execute(() =>
+      this.prisma.media.findUnique({
+        where: {
+          publicId,
+        },
+        include: {
+          coverFor: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      })
+    );
+  }
+
+  async delete(publicId: string) {
+    return execute(() => this.prisma.media.delete({ where: { publicId } }));
+  }
 }
