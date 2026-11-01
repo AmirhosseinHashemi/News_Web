@@ -74,7 +74,7 @@ export default class PostRepository {
             },
             cover: {
               select: {
-                filename: true,
+                url: true,
                 type: true,
               },
             },
