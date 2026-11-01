@@ -4,7 +4,6 @@ import { cloudinary } from "../../config/cloudinary.js";
 const STORAGE_FOLDER = "news-web";
 
 export type StoredFile = {
-  filename: string;
   publicId: string;
   url: string;
 };
@@ -39,7 +38,6 @@ export async function saveFile(
   });
 
   return {
-    filename: result.public_id,
     publicId: result.public_id,
     url: result.secure_url,
   };
