@@ -1,23 +1,19 @@
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 
 import { ROUTES } from "@/config/routes";
-import { getCategoriesReq } from "@/features/category/category.api";
-import { CreatePostForm } from "@/features/post/components/CreatePostForm";
 import {
-  POST_LOCATION_OPTIONS,
-  POST_TYPE_OPTIONS,
-} from "@/features/post/post.constant";
+  CreatePostFormSection,
+  CreatePostFormSkeleton,
+} from "@/features/post/components/CreatePostFormSection";
 
 export const metadata: Metadata = {
   title: "ایجاد خبر",
 };
 
-export default async function Page() {
-  const categoriesResponse = await getCategoriesReq({ limit: 100 });
-  const categories = categoriesResponse.success ? categoriesResponse.data : [];
-
+export default function Page() {
   return (
     <div className="space-y-6">
       <div className="space-y-2">
@@ -37,11 +33,9 @@ export default async function Page() {
         </div>
       </div>
 
-      <CreatePostForm
-        categories={categories}
-        types={POST_TYPE_OPTIONS}
-        locations={POST_LOCATION_OPTIONS}
-      />
+      <Suspense fallback={<CreatePostFormSkeleton />}>
+        <CreatePostFormSection />
+      </Suspense>
     </div>
   );
 }
