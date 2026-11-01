@@ -173,8 +173,11 @@ model Post {
 
 model Media {
   id        Int       @id @default(autoincrement())
+  
   type      MediaType
-  filename  String
+  url       String
+  publicId  String?
+
   mimeType  String
   size      Int
 
