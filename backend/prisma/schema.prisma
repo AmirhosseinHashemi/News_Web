@@ -176,7 +176,7 @@ model Media {
   
   type      MediaType
   url       String
-  publicId  String?
+  publicId  String?   @unique
 
   mimeType  String
   size      Int
