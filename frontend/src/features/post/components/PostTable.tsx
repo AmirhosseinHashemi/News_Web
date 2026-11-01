@@ -112,7 +112,7 @@ function PostTableCover({ post }: { post: Post }) {
     <div className="relative size-12 shrink-0 overflow-hidden rounded-md border bg-muted">
       {post.cover ? (
         <Image
-          src={post.cover.filename}
+          src={post.cover.url}
           alt=""
           fill
           sizes="48px"

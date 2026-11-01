@@ -26,7 +26,7 @@ export function CardMedia({
     <div className={cn("relative overflow-hidden bg-muted", className)}>
       {cover ? (
         <Image
-          src={cover.filename}
+          src={cover.url}
           alt={alt}
           fill
           sizes={sizes}

@@ -49,7 +49,7 @@ export type PostCardVariant = "hero" | "default" | "list" | "compact" | "video";
 export type MediaType = "IMAGE" | "VIDEO";
 
 export type Media = {
-  filename: string;
+  url: string;
   type: MediaType;
 };
 
