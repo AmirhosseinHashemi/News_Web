@@ -55,6 +55,7 @@ export function CreatePostForm({
       typeId: 0,
       categoryId: 0,
       locationId: 0,
+      coverId: undefined,
       metaTitle: "",
       metaDescription: "",
       expiresAt: "",
@@ -295,7 +296,19 @@ export function CreatePostForm({
           </CardHeader>
 
           <CardContent>
-            <CoverUpload />
+            <Controller
+              name="coverId"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid} className="gap-2">
+                  <CoverUpload value={field.value} onChange={field.onChange} />
+
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
           </CardContent>
         </Card>
 

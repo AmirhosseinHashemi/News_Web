@@ -2,13 +2,29 @@
 
 import { Image as ImageIcon, Trash2 } from "lucide-react";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { useUploadCoverMutation } from "@/features/media/hooks/useUploadCoverMutation";
+import { toast } from "@/components/ui/toast";
+import { useDeleteCoverMutation } from "@/features/media/hooks/useDeleteCoverMutation";
 
-export function CoverUpload() {
+interface CoverUploadProps {
+  value?: number;
+  onChange: (coverId: number | undefined) => void;
+}
+
+export function CoverUpload({ onChange, value }: CoverUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
+  const {
+    mutate: uploadCover,
+    isPending: isPendingUpload,
+    data: uploadData,
+  } = useUploadCoverMutation();
+  const { mutate: deleteCover, isPending: isPendingDelete } =
+    useDeleteCoverMutation();
+  const isLoading = isPendingDelete || isPendingUpload;
 
   function openFilePicker() {
     inputRef.current?.click();
@@ -18,16 +34,60 @@ export function CoverUpload() {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    if (preview) URL.revokeObjectURL(preview);
     setPreview(URL.createObjectURL(file));
+    uploadCover(file, {
+      onSuccess: (res) => {
+        if (res.success) {
+          onChange(res.data.id);
+          toast.add({
+            type: "success",
+            description: res.message,
+          });
+        }
+
+        if (!res.success) {
+          toast.add({
+            type: "error",
+            description: res.message,
+          });
+        }
+      },
+    });
   }
 
   function removePreview() {
-    if (preview) URL.revokeObjectURL(preview);
-    setPreview(null);
+    if (uploadData && uploadData.success) {
+      deleteCover(uploadData.data.publicId, {
+        onSuccess: (res) => {
+          if (res.success) {
+            setPreview(null);
+            onChange(undefined);
 
-    if (inputRef.current) inputRef.current.value = "";
+            if (inputRef.current) inputRef.current.value = "";
+
+            toast.add({
+              type: "succcess",
+              description: res.message,
+            });
+          }
+
+          if (!res.success)
+            toast.add({
+              type: "error",
+              description: res.message,
+            });
+        },
+      });
+    }
   }
+
+  useEffect(() => {
+    return () => {
+      if (preview) {
+        URL.revokeObjectURL(preview);
+      }
+    };
+  }, [preview]);
 
   return (
     <div>
@@ -52,15 +112,17 @@ export function CoverUpload() {
 
           <div className="absolute inset-x-0 bottom-0 flex justify-end gap-2 bg-linear-to-t from-black/60 to-transparent p-2">
             <Button
+              disabled={isLoading}
               type="button"
               variant="secondary"
               size="sm"
               onClick={openFilePicker}
             >
-              تغییر تصویر
+              {isLoading ? "در حال بارگذاری ..." : "تغییر تصویر"}
             </Button>
 
             <Button
+              disabled={isLoading}
               type="button"
               variant="destructive"
               size="icon-sm"
@@ -88,6 +150,11 @@ export function CoverUpload() {
             PNG یا JPG، حداکثر ۵ مگابایت
           </span>
         </button>
+      )}
+      {value && (
+        <p className="mt-2 text-xs text-muted-foreground" dir="ltr">
+          PublicId: {uploadData && uploadData.success && uploadData.data.publicId}
+        </p>
       )}
     </div>
   );

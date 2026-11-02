@@ -15,6 +15,7 @@ export const createPostSchema = z.object({
   typeId: z.number().int().positive("نوع خبر را انتخاب کنید."),
   categoryId: z.number().int().positive("دسته‌بندی را انتخاب کنید."),
   locationId: z.number().int().nonnegative(),
+  coverId: z.number().int().positive().optional(),
   metaTitle: z
     .string()
     .trim()
