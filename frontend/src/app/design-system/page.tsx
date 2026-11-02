@@ -70,7 +70,7 @@ const toPost = (data: SampleCardData): Post => {
           ?.label ?? "عمومی",
     },
     cover: data.cover
-      ? { filename: data.cover.src, type: data.media?.type ?? "IMAGE" }
+      ? { url: data.cover.src, type: data.media?.type ?? "IMAGE" }
       : null,
   };
 };
