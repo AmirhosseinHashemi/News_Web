@@ -33,7 +33,17 @@ export async function http<T>(
   const session = await getSession();
 
   const headers = new Headers(options.headers);
-  if (body !== undefined) headers.set("Content-Type", "application/json");
+
+  const isFormData = body instanceof FormData;
+
+  if (body !== undefined && !isFormData) {
+    headers.set("Content-Type", "application/json");
+  }
+
+  if (isFormData) {
+    headers.delete("Content-Type");
+  }
+
   if (session) headers.set("Authorization", `Bearer ${session.accessToken}`);
 
   // 1) network problems / timeout -> same shape as an API error
@@ -43,7 +53,12 @@ export async function http<T>(
       ...(rest.cache || rest.next ? {} : { cache: "no-store" as const }),
       ...rest,
       headers,
-      body: body === undefined ? undefined : JSON.stringify(body),
+      body:
+        body === undefined
+          ? undefined
+          : isFormData
+            ? body
+            : JSON.stringify(body),
       signal: rest.signal ?? AbortSignal.timeout(TIMEOUT_MS),
     });
   } catch (err) {
