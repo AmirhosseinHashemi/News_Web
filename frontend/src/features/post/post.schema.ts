@@ -26,7 +26,7 @@ export const createPostSchema = z.object({
     .trim()
     .max(500, "توضیحات متا حداکثر ۵۰۰ کاراکتر است.")
     .optional(),
-  expiresAt: z.string().optional(),
+  expiresAt: z.date().optional(),
 });
 
 export type CreatePostFormValues = z.infer<typeof createPostSchema>;

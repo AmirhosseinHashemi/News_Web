@@ -5,6 +5,7 @@ import { Loader2, Save } from "lucide-react";
 import Link from "next/link";
 import { Controller, useForm } from "react-hook-form";
 
+import PersianDatePicker from "@/components/shared/PersianDatePicker";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
@@ -58,7 +59,7 @@ export function CreatePostForm({
       coverId: undefined,
       metaTitle: "",
       metaDescription: "",
-      expiresAt: "",
+      expiresAt: new Date(),
     },
   });
 
@@ -266,23 +267,25 @@ export function CreatePostForm({
                 )}
               />
 
-              <Field data-invalid={!!errors.expiresAt}>
-                <FieldLabel htmlFor="post-expires-at">
-                  تاریخ انقضا{" "}
-                  <span className="font-normal text-muted-foreground">
-                    (اختیاری)
-                  </span>
-                </FieldLabel>
-                <Input
-                  id="post-expires-at"
-                  type="datetime-local"
-                  dir="ltr"
-                  className="text-left"
-                  aria-invalid={!!errors.expiresAt}
-                  {...form.register("expiresAt")}
-                />
-                <FieldError errors={[errors.expiresAt]} />
-              </Field>
+              <Controller
+                name="expiresAt"
+                control={form.control}
+                render={({ field }) => (
+                  <Field data-invalid={!!errors.expiresAt}>
+                    <FieldLabel htmlFor="post-expires-at">
+                      تاریخ انقضا{" "}
+                      <span className="font-normal text-muted-foreground">
+                        (اختیاری)
+                      </span>
+                    </FieldLabel>
+                    <PersianDatePicker
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                    <FieldError errors={[errors.expiresAt]} />
+                  </Field>
+                )}
+              />
             </FieldGroup>
           </CardContent>
         </Card>
