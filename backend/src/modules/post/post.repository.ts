@@ -91,6 +91,37 @@ export default class PostRepository {
     return execute(() =>
       this.prisma.post.create({
         data,
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          excerpt: true,
+          status: true,
+          createdAt: true,
+          publishedAt: true,
+          updatedAt: true,
+          deletedAt: true,
+
+          author: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+          category: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          cover: {
+            select: {
+              url: true,
+              type: true,
+            },
+          },
+        },
       })
     );
   }
