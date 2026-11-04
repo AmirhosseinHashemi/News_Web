@@ -1,4 +1,8 @@
-import type { GetPostsParams, Post } from "@/features/post/post.type";
+import type {
+  CreatePostPayload,
+  GetPostsParams,
+  Post,
+} from "@/features/post/post.type";
 import { http } from "@/lib/http";
 
 export const POST_PAGE_SIZE = 9;
@@ -23,4 +27,11 @@ export async function getPostsReq({
   if (locationId) params.set("locationId", String(locationId));
 
   return http<Post[]>(`/admin/posts?${params.toString()}`);
+}
+
+export async function postCreatePostReq(payload: CreatePostPayload) {
+  return http<Post>("/admin/posts", {
+    method: "POST",
+    body: payload,
+  });
 }

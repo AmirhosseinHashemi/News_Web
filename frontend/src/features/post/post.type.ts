@@ -1,5 +1,6 @@
 import type { User } from "@/features/auth/auth.type";
 import type { Category } from "@/features/category/category.type";
+import { CreatePostFormValues } from "@/features/post/post.schema";
 
 export type PostStatus = "DRAFT" | "PUBLISHED";
 
@@ -19,10 +20,15 @@ export type Post = {
   slug: string;
   excerpt: string | null;
   status: PostStatus;
+
   createdAt: string;
   publishedAt: string | null;
   updatedAt: string;
   deletedAt: string | null;
+
+  metaTitle: string | null;
+  metaDescription: string | null;
+
   author: Pick<User, "id" | "firstName" | "lastName">;
   category: Pick<Category, "id" | "name">;
   cover: Media | null;
@@ -58,3 +64,5 @@ export interface MediaInfo {
   totalSeconds?: number;
   count?: number;
 }
+
+export type CreatePostPayload = CreatePostFormValues;
