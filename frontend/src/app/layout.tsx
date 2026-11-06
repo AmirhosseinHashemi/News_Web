@@ -4,12 +4,24 @@ import { Toaster } from "@/components/ui/toast";
 import { estedad } from "@/lib/fonts";
 import type { Metadata } from "next";
 import NextTopLoader from "nextjs-toploader";
-import "./globals.css";
 import { ViewTransition } from "react";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: { default: "اخبار رحق", template: "%s | رحق" },
-  description: "آخرین اخبار ایران و جهان",
+  description: "آخرین اخبار، رویدادها و اطلاعیه‌های رحق و شهرستان کاشان",
+  applicationName: "اخبار رحق",
+  openGraph: {
+    type: "website",
+    locale: "fa_IR",
+    siteName: "اخبار رحق",
+    title: "اخبار رحق | اخبار رحق و کاشان",
+    description: "مرجع اخبار و اطلاع رسانی رحق و کاشان",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
