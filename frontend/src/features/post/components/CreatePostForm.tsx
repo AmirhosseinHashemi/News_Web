@@ -1,9 +1,8 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Save } from "lucide-react";
 import Link from "next/link";
-import { Controller, useForm } from "react-hook-form";
+import { Controller } from "react-hook-form";
 
 import PersianDatePicker from "@/components/shared/PersianDatePicker";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -27,10 +26,7 @@ import { ROUTES } from "@/config/routes";
 import type { Category } from "@/features/category/category.type";
 import { CoverUpload } from "@/features/post/components/CoverUpload";
 import { PostFormCombobox } from "@/features/post/components/PostFormCombobox";
-import {
-  type CreatePostFormValues,
-  createPostSchema,
-} from "@/features/post/post.schema";
+import { useCreatePostForm } from "@/features/post/hooks/useCreatePostForm";
 import type {
   PostLocationOption,
   PostTypeOption,
@@ -47,31 +43,11 @@ export function CreatePostForm({
   types,
   locations,
 }: CreatePostFormProps) {
-  const form = useForm<CreatePostFormValues>({
-    resolver: zodResolver(createPostSchema),
-    defaultValues: {
-      title: "",
-      excerpt: "",
-      content: "",
-      typeId: 0,
-      categoryId: 0,
-      locationId: 0,
-      coverId: undefined,
-      metaTitle: "",
-      metaDescription: "",
-      expiresAt: new Date(),
-    },
-  });
-
-  const { errors, isSubmitting } = form.formState;
-
-  function onSubmit(_values: CreatePostFormValues) {
-    void _values;
-  }
+  const { form, errors, onSubmit, isSubmitting } = useCreatePostForm();
 
   return (
     <form
-      onSubmit={form.handleSubmit(onSubmit)}
+      onSubmit={onSubmit}
       noValidate
       className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start"
     >
@@ -205,7 +181,7 @@ export function CreatePostForm({
                       id="post-type"
                       options={types}
                       value={field.value}
-                      onChange={(value) => field.onChange(value ?? 0)}
+                      onChange={(value) => field.onChange(value)}
                       placeholder="نوع خبر را انتخاب کنید"
                       ariaLabel="نوع خبر"
                       invalid={fieldState.invalid}
@@ -227,7 +203,7 @@ export function CreatePostForm({
                       id="post-category"
                       options={categories}
                       value={field.value}
-                      onChange={(value) => field.onChange(value ?? 0)}
+                      onChange={(value) => field.onChange(value)}
                       placeholder="دسته‌بندی را انتخاب کنید"
                       ariaLabel="دسته‌بندی خبر"
                       invalid={fieldState.invalid}
@@ -254,11 +230,10 @@ export function CreatePostForm({
                       id="post-location"
                       options={locations}
                       value={field.value}
-                      onChange={(value) => field.onChange(value ?? 0)}
+                      onChange={(value) => field.onChange(value)}
                       placeholder="موقعیت خبر را انتخاب کنید"
                       ariaLabel="موقعیت خبر"
                       invalid={fieldState.invalid}
-                      allowClear
                     />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
