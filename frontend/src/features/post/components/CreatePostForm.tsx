@@ -43,7 +43,8 @@ export function CreatePostForm({
   types,
   locations,
 }: CreatePostFormProps) {
-  const { form, errors, onSubmit, isSubmitting } = useCreatePostForm();
+  const { form, errors, onSubmit, isSubmitting, resetKey } =
+    useCreatePostForm();
 
   return (
     <form
@@ -220,12 +221,7 @@ export function CreatePostForm({
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid} className="gap-2">
-                    <FieldLabel htmlFor="post-location">
-                      موقعیت{" "}
-                      <span className="font-normal text-muted-foreground">
-                        (اختیاری)
-                      </span>
-                    </FieldLabel>
+                    <FieldLabel htmlFor="post-location">موقعیت </FieldLabel>
                     <PostFormCombobox
                       id="post-location"
                       options={locations}
@@ -279,7 +275,11 @@ export function CreatePostForm({
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid} className="gap-2">
-                  <CoverUpload value={field.value} onChange={field.onChange} />
+                  <CoverUpload
+                    key={resetKey}
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
 
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />

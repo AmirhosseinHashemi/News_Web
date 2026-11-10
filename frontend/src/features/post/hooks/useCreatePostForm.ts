@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { toast } from "@/components/ui/toast";
@@ -28,11 +29,8 @@ function toCreatePostPayload(values: CreatePostFormValues): CreatePostPayload {
 
 export function useCreatePostForm() {
   const router = useRouter();
-  const {
-    mutate: createPost,
-    isPending,
-    reset: resetMutation,
-  } = useCreatePostMutation();
+  const [resetKey, setResetKey] = useState(0);
+  const { mutate: createPost, isPending } = useCreatePostMutation();
 
   const form = useForm<CreatePostFormInput>({
     resolver: zodResolver(createPostSchema),
@@ -77,7 +75,7 @@ export function useCreatePostForm() {
 
         toast.add({ type: "success", description: res.message });
         form.reset();
-        resetMutation();
+        setResetKey((key) => key + 1);
         router.push(ROUTES.posts);
       },
       onError: (error) => {
@@ -91,5 +89,6 @@ export function useCreatePostForm() {
     errors: form.formState.errors,
     onSubmit: form.handleSubmit(onSubmit),
     isSubmitting: isPending,
+    resetKey,
   };
 }

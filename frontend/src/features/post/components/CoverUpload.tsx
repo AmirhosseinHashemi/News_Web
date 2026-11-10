@@ -5,9 +5,9 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { useUploadCoverMutation } from "@/features/media/hooks/useUploadCoverMutation";
 import { toast } from "@/components/ui/toast";
 import { useDeleteCoverMutation } from "@/features/media/hooks/useDeleteCoverMutation";
+import { useUploadCoverMutation } from "@/features/media/hooks/useUploadCoverMutation";
 
 interface CoverUploadProps {
   value?: number;
@@ -35,6 +35,7 @@ export function CoverUpload({ onChange, value }: CoverUploadProps) {
     if (!file) return;
 
     setPreview(URL.createObjectURL(file));
+
     uploadCover(file, {
       onSuccess: (res) => {
         if (res.success) {
@@ -56,6 +57,11 @@ export function CoverUpload({ onChange, value }: CoverUploadProps) {
   }
 
   function removePreview() {
+    if (!uploadData && preview) {
+      setPreview(null);
+      onChange(undefined);
+    }
+
     if (uploadData && uploadData.success) {
       deleteCover(uploadData.data.publicId, {
         onSuccess: (res) => {
@@ -153,7 +159,8 @@ export function CoverUpload({ onChange, value }: CoverUploadProps) {
       )}
       {value && (
         <p className="mt-2 text-xs text-muted-foreground" dir="ltr">
-          PublicId: {uploadData && uploadData.success && uploadData.data.publicId}
+          PublicId:{" "}
+          {uploadData && uploadData.success && uploadData.data.publicId}
         </p>
       )}
     </div>
