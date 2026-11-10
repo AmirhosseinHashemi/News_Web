@@ -12,9 +12,9 @@ export const createPostSchema = z.object({
     .max(500, "خلاصه حداکثر ۵۰۰ کاراکتر است.")
     .optional(),
   content: z.string().trim().min(1, "محتوای خبر را وارد کنید."),
-  typeId: z.number().int().positive("نوع خبر را انتخاب کنید."),
-  categoryId: z.number().int().positive("دسته‌بندی را انتخاب کنید."),
-  locationId: z.number().int().positive(),
+  typeId: z.number({ error: "نوع خبر را انتخاب کنید." }).int().positive(),
+  categoryId: z.number({ error: "دسته‌بندی را انتخاب کنید." }).int().positive(),
+  locationId: z.number({ error: "موقعیت را انتخاب کنید." }).int().positive(),
   coverId: z.number().int().positive().optional(),
   metaTitle: z
     .string()
