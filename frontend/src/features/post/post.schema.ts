@@ -14,7 +14,7 @@ export const createPostSchema = z.object({
   content: z.string().trim().min(1, "محتوای خبر را وارد کنید."),
   typeId: z.number().int().positive("نوع خبر را انتخاب کنید."),
   categoryId: z.number().int().positive("دسته‌بندی را انتخاب کنید."),
-  locationId: z.number().int().nonnegative(),
+  locationId: z.number().int().positive(),
   coverId: z.number().int().positive().optional(),
   metaTitle: z
     .string()
@@ -26,7 +26,9 @@ export const createPostSchema = z.object({
     .trim()
     .max(500, "توضیحات متا حداکثر ۵۰۰ کاراکتر است.")
     .optional(),
-  expiresAt: z.date().optional(),
+  expiresAt: z.date().nullable().optional(),
 });
 
-export type CreatePostFormValues = z.infer<typeof createPostSchema>;
+export type CreatePostFormInput = z.input<typeof createPostSchema>;
+
+export type CreatePostFormValues = z.output<typeof createPostSchema>;
